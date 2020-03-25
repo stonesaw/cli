@@ -1,8 +1,10 @@
 var terminal = null;
 var value = "";
-var operater = "> "
-const COMMAND = ["print", "cd"]
-const PAGES = ["AboutMe", "Develop", "GPS"]
+var operater = "> ";
+var options = "";
+const COMMAND = ["print", "cd", "cls"];
+const PAGES = ["AboutMe", "Develop", "GPS"];
+var variable = {};
 
 function setTerminal(){
 	// ブラウザのウインドウサイズを取得
@@ -31,61 +33,44 @@ window.addEventListener("keyup", function(e){
 	let key = e.keyCode;
 	
 	// Enterキーが押されたとき
-	if(key == 13){
+	if (key == 13) {
 		value = terminal.value.replace(/>\s/g,"");	// textareaの文字列を取得
 	
-		if(value.match(/\n$/) == null){	// 漢字変換でEnterキーを押した場合
+		if (value.match(/\n$/) == null) {	// 漢字変換でEnterキーを押した場合
 			return;										// 取得した文字の最後が改行文字ではないので何もしない
 		}
         // 新しいプロンプトを追加表示
         value = value.replace(/\r?\n/g,"");
+        // 何か入力されたら
         if (value != "") {
+            msg_draw("");
             command_check(value);
         }
-		terminal.value = "" + operater;
-        console.log("[" + value + "]");
+        terminal.value = operater + options;
+        terminal_draw(value);
+        options = "";
         
 		// フォーカスを常にtextareaにしておく
 		terminal.focus();
-	}
+	} else if (key == 27) {
+        terminal_clear();
+    };
 });
+
+function terminal_draw(str) {
+    console.log("[" + str + "]");
+}
 
 function terminal_clear() {
     terminal.value = operater;
-};
+}
 
-function command_check(str){
-    ary = str.split(" ")
-    if (str == "print" || str == "print -h") {
-        return document.getElementById("title").innerHTML = `print Command => print text`
-    } else if (str == "cd" || str == "cd -h") {
-        return document.getElementById("title").innerHTML = `cd Command => cd page`
-    } else if (COMMAND.includes(ary[0])) {
-        if ((/^print/).test(str)) {
-            if (ary.length != 2) {
-                document.getElementById("title").innerHTML = `Syntax Error`
-            } else if ((ary[1].length < 1)) {
-                document.getElementById("title").innerHTML = `no value`
-            } else {
-                document.getElementById("title").innerHTML = `${ary[1]}`
-            }
-        } else if ((/^cd/).test(str)) {
-            if (ary.length != 2) {
-                document.getElementById("title").innerHTML = `Syntax Error`
-            } else if ((ary[1].length < 1)) {
-                document.getElementById("title").innerHTML = `no value`
-            } else {
-                if (page_check(ary[1]) == true) {
-                    document.getElementById("title").innerHTML = `go to ${ary[1]}`
-                    window.location.href = ("./"+ary[1]+".html")
-                } else {
-                    document.getElementById("title").innerHTML = `${ary[1]} is Not found!`
-                }
-            }
-        }
-    } else {
-        document.getElementById("title").innerHTML = `What's Command ${ary[0]}?`
-    }
+function title_draw(str) {
+    document.getElementById("title").innerHTML = str;
+}
+
+function msg_draw(str) {
+    document.getElementById("msg").innerHTML = str;
 };
 
 function page_check(page) {
@@ -94,5 +79,104 @@ function page_check(page) {
     } else {
         return false;
     }
-};
+}
 
+function command_check(str) {
+    ary = str.split(" ");
+    if (ary[0] == "print") {
+        com_check_print(str);
+    } else if (ary[0] == "cd") {
+        com_check_cd(str);
+    } else if (str == "cls") {
+        com_check_cls(str);
+    } else if (ary[0] == "var") {
+        com_check_var(str);
+    } else if (str == "list") {
+        com_check_list();
+    } else {
+        msg_draw(`What's '${str.split(" ")[0]}'?<br>Is it delicious?`);
+    }
+}
+
+function com_check_print(str) {
+    ary = str.split(" ");
+    if (str == "print" || str == "print " || str == "print -h") {
+        msg_draw(` ! Print Command<br>print 'text'`);
+    } else {
+        for (let i = 2; ary.length > i; i++) {
+            ary[1] = ary[1] + " " + ary[i];
+        }
+        if ((/^[0-9]*$/).test(ary[1])) {
+            title_draw(`${ary[1]}`) || "null";
+        } else if ((/^'(.*?)'$/).test(ary[1])) {
+            const matches = ((/'(.*?)'/).exec(ary[1])[1]) || "null";
+            title_draw(`${matches}`);
+        } else if ((/^"(.*?)"$/).test(ary[1])) {
+            const matches = ((/"(.*?)"/).exec(ary[1])[1]) || "null";
+            title_draw(`${matches}`);
+        } else {
+            if (variable[ary[1]]) {
+                title_draw(`${variable[ary[1]]}`) || "null";
+            } else {
+                msg_draw(`undefined ${ary[1]}!`);
+            }
+        }
+    }
+}
+
+function com_check_cd(str) {
+    ary = str.split(" ");
+    if (str == "cd" || str == "cd " || str == "cd -h") {
+        msg_draw(` ! CD Command<br>cd 'page'`);
+    } else if (ary.length != 2) {
+        msg_draw(`Syntax Error`);
+    } else {
+        if (page_check(ary[1]) == true) {
+            title_draw(`go to ${ary[1]}`);
+            window.location.href = (`#${ary[1]}`)
+        } else {
+            msg_draw(`'${ary[1]}'<br>is not found!`);
+        }
+    }
+}
+
+function com_check_cls(str) {
+    if (str == "cls") {
+        title_draw(`(.<span class="UnderBar">_</span>.)`);
+        options = "・・・";
+    }
+}
+
+function com_check_var(str) {
+    ary = str.split(" ");
+    if (ary[0] == "var" && ary[2] == "=") {
+        if (ary[3] in variable) {
+            ary[3] = variable[ary[3]];
+        }
+        if ((/^[0-9]*$/).test(ary[3])) {
+            variable[ary[1]] = Number(ary[3]);
+            console.log(variable[ary[1]]);
+            msg_draw(`def ${ary[1]} > ${variable[ary[1]]}`);
+        } else if ((/^'(.*?)'$/).test(ary[3])) {
+            ary[3] = (/^'(.*?)'$/).exec(ary[3])[1] || "null";
+            variable[ary[1]] = String(ary[3]);
+            msg_draw(`def ${ary[1]} > '${variable[ary[1]]}'`);
+        } else if ((/^"(.*?)"$/).test(ary[3])) {
+            ary[3] = ((/^"(.*?)"$/).exec(ary[3])[1]) || "null";
+            variable[ary[1]] = String(ary[3]);
+            msg_draw(`def ${ary[1]} > '${variable[ary[1]]}'`);
+        } else {
+            msg_draw(`undefined ${ary[1]}`);
+        }
+    } else {
+        msg_draw(`Var Command<br>var name = (value)`);
+    }
+}
+
+function com_check_list() {
+    var msg = ""
+    for (let key in variable) {
+        msg = (msg + `N: ${key} V: ${variable[key]} T: ${typeof(variable[key])}<br>`);
+    }
+    msg_draw(msg);
+}

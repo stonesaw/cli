@@ -3,25 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./font/fontOxygenMono-Regular.otf">
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./console.css">
   <script src="./console.js"></script>
   <title>stonesaw-Top</title>
 </head>
 <body>
-  <!-- Title -->
-  <div id="title">はろわ</div>
+  <div class="Top">
+    <!-- Title -->
+    <div class="title" id="title">Classical</div>
+    
+    <!-- SideBar -->
+    <div class="sidebar">
+      <a href="#AboutMe">a</a>
+      <a href="#Develop">a</a>
+      <a href="#GPS">a</a>
+    </div>
+  
+    <!-- Console -->
+    <div class="console">
+      <textarea id="terminal" rows="5" cols="20" spellcheck="false"></textarea>
+    </div>
 
-  <div class="console">
-    <textarea id="terminal" rows="5" cols="20" spellcheck="false"></textarea>
+    <!-- エラーメッセージ -->
+    <div id="msg">ーーー</div>
+
+    <!-- <div class="baseBox">
+      <div class="backStr">sample</div>
+      <div class="frontStr">CSSで背景に<br>透かし文字を<br>入れるサンプル</div>
+    </div> -->
+  </div>
+  
+  <div class="AboutMe">
+    <a id="AboutMe">AboutMe</a>
   </div>
 
-  <div class="sidebar">
-    this is side bar!
-    jump
-    <a href="./AboutMe.html">About Me</a>
-    <a href="./Develop.html">Develop</a>
-    <a href="./GPS.html">GPS</a>
+  <div class="Develop">
+    <a id="Develop">Develop</a>
+  </div>
+
+  <div class="GPS">
+    <a id="GPS">GPS</a>
   </div>
 </body>
 </html>
