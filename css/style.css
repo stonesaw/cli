@@ -1,17 +1,18 @@
 @font-face {
 	font-family: 'Oxeygen Mono';
-    src: url("./font/oxeygen-mono/OxygenMono-Regular.otf");
+    src: url("./../font/oxeygen-mono/OxygenMono-Regular.otf");
     font-family: 'Refale';
-    src: url("./font/Refale/Rafale-BG.ttf");
+    src: url("./../font/Refale/Rafale-BG.ttf");
 }
 
 body {
-    max-width: 100vw;
-    max-height: 1260px;
+    /* overflow: hidden;   scroll off */
+    /* max-width: 100vw;
+    max-height: 1260px; */
     font-size: 20px;
     font-family: "Montserrat",'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','ヒラギノ丸ゴ Pro W4','Hiragino Maru Gothic Pro',游ゴシック体,'Yu Gothic',YuGothic,sans-serif;
     background: #252525;
-    color: #ddd;
+    color: black;
     margin: 0;
     padding: 0;
     border: 0;
@@ -28,7 +29,7 @@ a {
 
 .Top {
     width: 100%;
-    background-image: url("./image/hut-1681485_1920.jpg");
+    background-image: url("./../image/hut-1681485_1920.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -73,8 +74,50 @@ a {
 }
 
 .Develop {
-    background: lightcyan;
+    background: azure;
+    background-image: url("./../image/abstract-4791837_1920.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 100vh;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+}
+
+.content-web-site {
+    width: 50%;
+    height: 40vh;
+    padding: 2%;
+    margin: 0.5%;
+    background-color: rgba(240, 255, 255, 0.7);
+    float: left;
+}
+
+.content-ruby {
+    width: 40%;
+    height: 40vh;
+    padding: 2%;
+    margin: 0.5%;
+    background-color: rgba(240, 255, 255, 0.7);
+    float: left;
+}
+
+.content-any {
+    width: 60%;
+    height: 30vh;
+    padding: 2%;
+    margin: 0.5%;
+    background-color: rgba(240, 255, 255, 0.7);
+    float: left;
+}
+
+.content-new {
+    width: 30%;
+    height: 30vh;
+    padding: 2%;
+    margin: 0.5%;
+    background-color: rgba(240, 255, 255, 0.7);
+    float: left;
 }
 
 .GPS {

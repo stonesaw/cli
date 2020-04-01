@@ -2,8 +2,7 @@ var terminal = null;
 var value = "";
 var operater = "> ";
 var options = "";
-const COMMAND = ["print", "cd", "cls"];
-const PAGES = ["AboutMe", "Develop", "GPS"];
+const PAGES = ["Top", "AboutMe", "Develop", "GPS"];
 var variable = {};
 
 function setTerminal(){
@@ -103,22 +102,23 @@ function com_check_print(str) {
     if (str == "print" || str == "print " || str == "print -h") {
         msg_draw(` ! Print Command<br>print 'text'`);
     } else {
+        var text = `${ary[1]}`;
         for (let i = 2; ary.length > i; i++) {
-            ary[1] = ary[1] + " " + ary[i];
+            text = text + " " + ary[i];
         }
-        if ((/^[0-9]*$/).test(ary[1])) {
-            title_draw(`${ary[1]}`) || "null";
-        } else if ((/^'(.*?)'$/).test(ary[1])) {
-            const matches = ((/'(.*?)'/).exec(ary[1])[1]) || "null";
+        if ((/^[0-9]*$/).test(text)) {
+            title_draw(`${text}`) || "null";
+        } else if ((/^'(.*?)'$/).test(text)) {
+            const matches = ((/'(.*?)'/).exec(text)[1]) || "null";
             title_draw(`${matches}`);
-        } else if ((/^"(.*?)"$/).test(ary[1])) {
-            const matches = ((/"(.*?)"/).exec(ary[1])[1]) || "null";
+        } else if ((/^"(.*?)"$/).test(text)) {
+            const matches = ((/"(.*?)"/).exec(text)[1]) || "null";
             title_draw(`${matches}`);
         } else {
-            if (variable[ary[1]]) {
-                title_draw(`${variable[ary[1]]}`) || "null";
+            if (variable[text]) {
+                title_draw(`${variable[text]}`) || "null";
             } else {
-                msg_draw(`undefined ${ary[1]}!`);
+                msg_draw(`undefined ${text}!`);
             }
         }
     }
@@ -133,11 +133,21 @@ function com_check_cd(str) {
     } else {
         if (page_check(ary[1]) == true) {
             title_draw(`go to ${ary[1]}`);
-            window.location.href = (`#${ary[1]}`)
+            com_cd_motion(ary[1]);
         } else {
             msg_draw(`'${ary[1]}'<br>is not found!`);
         }
     }
+}
+
+function com_cd_motion(page) {
+    //  // スクロール速度(ミリ秒)
+     var speed = 800;
+    //  // 移動先を取得
+     var position = $(`#${page}`).offset().top;
+     // 移動
+     $('body,html').animate({scrollTop:position}, speed, 'swing');
+     return false;
 }
 
 function com_check_cls(str) {
