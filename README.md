@@ -1,2 +1,2 @@
-# v0x0v.studio
-v0x0v.studio
+# My Portfolio
+https://www.v0x0v.studio
