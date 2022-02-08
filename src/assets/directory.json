@@ -1,0 +1,12 @@
+{
+  "~": {
+    "cli": {
+      "README.md": "txt",
+      "src": {
+        "assets": {
+          "logo.png": "img"
+        }
+      }
+    }
+  }
+}

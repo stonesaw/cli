@@ -1,8 +1,12 @@
 <template>
-  <span ref="currentInput" class="cli-input">
-    <input type="text" v-model="inputText" autofocus maxlength="30" @keydown.enter='send'>
-    <!-- TODO -->
-    <!-- https://developer.mozilla.org/ja/docs/Web/API/HTMLElement/focus -->
+  <span class="cli-input"
+   @keydown.up="pressKeyUp"
+   @keydown.down="pressKeyDown"
+  >
+    <input type="text" v-model="inputText"
+     autofocus maxlength="30"
+     @keydown.enter="pressKeyEnter"
+    >
   </span>
 </template>
 
@@ -11,15 +15,38 @@ export default {
   data() {
     return {
       inputText: "",
-      dir: "refs terminal",
       history: [],
-      historyIndex: 0
+      historyIndex: null
     }
   },
 
   methods: {
-    send() {
-      this.$emit("key-input", this.inputText);
+    pressKeyEnter() {
+      this.$emit("exec-cmd", this.inputText);
+      this.history.push(this.inputText);
+      this.historyIndex = this.history.length;
+      this.inputText = ""
+    },
+
+    pressKeyUp(e) {
+      e.preventDefault();
+      if (this.history.length > 0) {
+        this.historyIndex = Math.max(this.historyIndex - 1, 0);
+        this.inputText = this.history[this.historyIndex];
+      }
+    },
+
+    pressKeyDown(e) {
+      e.preventDefault();
+      if (this.history.length > 0 && this.historyIndex !== null) {
+        if (this.historyIndex === this.history.length - 1) {
+          this.historyIndex = null;
+          this.inputText = "";
+        } else {
+          this.historyIndex = Math.min(this.historyIndex + 1, this.history.length - 1);
+          this.inputText = this.history[this.historyIndex];
+        }
+      }
     }
   }
 }

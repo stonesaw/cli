@@ -17,7 +17,7 @@ export default {
 
 <style>
 :root {
-  --font-main: rgba(255, 255, 255, .95);
+  --font-main: rgba(255, 255, 255, .85);
   --bg-main: #222;
 }
 
