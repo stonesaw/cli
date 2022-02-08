@@ -1,14 +1,6 @@
 <template>
   <div class="terminal">
-    <div>Hello, World!</div>
-    <div class="cli-aa">
-      <div
-       v-for="(hello, index) in hello_ary"
-       :key="index"
-       v-html="hello"
-      ></div>
-    </div>
-    <div>Welcome to cli</div>
+    <TerminalStart />
     <!--  -->
     <div class="line">
       <span class="cli-head">stonesaw.github.io </span>
@@ -24,30 +16,21 @@
 </template>
 
 <script>
+import TerminalStart from './TerminalStart.vue'
 import InputCli from './InputCli.vue'
-const _hello = require('raw-loader!.././assets/hello.txt').default
 
 export default {
   name: 'Terminal',
   components: {
+    TerminalStart,
     InputCli
   },
 
   data() {
     return {
       inputText: "",
-      dir: "cli",
-      hello_ary: _hello
+      dir: "cli"
     }
-  },
-
-  mounted() {
-    console.log(_hello);
-    this.hello_ary = _hello.replace(/export default "/, "")
-                           .replace(/";/, "")
-                           .replaceAll(/\s/g, "&nbsp;")
-                           .split("\\n");
-    console.log(this.hello_ary);
   },
 
   methods: {
