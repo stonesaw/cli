@@ -2,33 +2,69 @@
   <div class="terminal">
     <div>Hello, World!</div>
     <div class="cli-aa">
-      <div>&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;________&nbsp;&nbsp;&nbsp;&nbsp;____&nbsp;&nbsp;&nbsp;__</div>
-      <div>|&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;/__&nbsp;&nbsp;/&nbsp;/________&nbsp;&nbsp;____&nbsp;___&nbsp;&nbsp;___&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;/_____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;____/&nbsp;/&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;_/&nbsp;&nbsp;/&nbsp;/</div>
-      <div>|&nbsp;|&nbsp;/|&nbsp;/&nbsp;/&nbsp;_&nbsp;\/&nbsp;/&nbsp;___/&nbsp;__&nbsp;\/&nbsp;__&nbsp;`__&nbsp;\/&nbsp;_&nbsp;\&nbsp;&nbsp;&nbsp;/&nbsp;__/&nbsp;__&nbsp;\&nbsp;&nbsp;&nbsp;/&nbsp;/&nbsp;&nbsp;&nbsp;/&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;/&nbsp;&nbsp;&nbsp;/&nbsp;/&nbsp;</div>
-      <div>|&nbsp;|/&nbsp;|/&nbsp;/&nbsp;&nbsp;__/&nbsp;/&nbsp;/__/&nbsp;/_/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;/&nbsp;&nbsp;__/&nbsp;&nbsp;/&nbsp;/_/&nbsp;/_/&nbsp;/&nbsp;&nbsp;/&nbsp;/___/&nbsp;/____/&nbsp;/&nbsp;&nbsp;&nbsp;/_/&nbsp;&nbsp;</div>
-      <div>|__/|__/\___/_/\___/\____/_/&nbsp;/_/&nbsp;/_/\___/&nbsp;&nbsp;&nbsp;\__/\____/&nbsp;&nbsp;&nbsp;\____/_____/___/&nbsp;&nbsp;(_)&nbsp;&nbsp;&nbsp;</div>
+      <div
+       v-for="(hello, index) in hello_ary"
+       :key="index"
+       v-html="hello"
+      ></div>
     </div>
     <div>Welcome to cli</div>
-    <div class="line">
-      <span class="cli-head">stonesaw.github.io $ </span>
-      <span ref="currentInput" class="cli-input">
-        <input type="text" v-model="inputText">
-
-      </span>
-    </div>
     <!--  -->
     <div class="line">
-      <span class="cli-result">input: {{ inputText }}</span>
+      <span class="cli-head">stonesaw.github.io </span>
+      <span class="cli-dir">{{ dir }}</span>
+      <span class="cli-head"> $ </span>
+      <InputCli @key-input="inputEvent" />
+    </div>
+    <!--  -->
+    <div>
+      <span class="cli-result">{{ inputText }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import InputCli from './InputCli.vue'
+const _hello = require('raw-loader!.././assets/hello.txt').default
+
 export default {
   name: 'Terminal',
+  components: {
+    InputCli
+  },
+
   data() {
     return {
-      inputText: ""
+      inputText: "",
+      dir: "cli",
+      hello_ary: _hello
+    }
+  },
+
+  mounted() {
+    console.log(_hello);
+    this.hello_ary = _hello.replace(/export default "/, "")
+                           .replace(/";/, "")
+                           .replaceAll(/\s/g, "&nbsp;")
+                           .split("\\n");
+    console.log(this.hello_ary);
+  },
+
+  methods: {
+    inputEvent(value) {
+      this.terminalProc(value);
+      // terminal_process(value)
+      // -> result (html)
+      // add html elm
+      // currentInput -> p  and  create new input
+    },
+
+    terminalProc(input) {
+      if (input.match(/^cd$/) !== null) {
+        this.inputText = "do Command cd!";
+      } else {
+        this.inputText = `Command '${input}' is not found! Use 'help' to see the command list.`;
+      }
     }
   }
 }
@@ -47,4 +83,9 @@ export default {
 .cli-head::selection {
   color: red;
 }
+
+.cli-dir {
+  color: dodgerblue;
+}
+
 </style>
