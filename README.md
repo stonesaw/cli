@@ -1,6 +1,8 @@
-# 🔨 Building now ...
-- This page is the root of my homepage [GitHub Pages : stonesaw.github.io/](https://stonesaw.github.io/)
-- Implement the cli interface on the web
+# 🎈 [cli](https://github.com/stonesaw/stonesaw.github.io/cli)
+https://github.com/stonesaw/stonesaw.github.io  
+[ 🔨 Building now ...]  
+Implement the cli interface on the web  
+
 
 ## ✨ Features
 ```bash
@@ -12,12 +14,9 @@ stonesaaw.github.io> ls
                      # => blog/
                      # => ...
 ```
-## 🐱 Repository
-  https://github.com/stonesaw/stonesaw.github.io
 
-<br>
 
-<details><summary>Project</summary><div>
+
   
 ## Project setup
 ```
@@ -42,4 +41,3 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-</div></details>
