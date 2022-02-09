@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Terminal />
+    <CLI />
   </div>
 </template>
 
 <script>
-import Terminal from './components/Terminal.vue'
+import CLI from './components/CLI.vue'
 
 export default {
   name: 'App',
   components: {
-    Terminal
+    CLI
   }
 }
 </script>

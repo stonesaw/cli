@@ -1,6 +1,6 @@
 <template>
-  <div class="terminal" ref="cli">
-    <TerminalStart />
+  <div class="cli-main">
+    <CLIStart />
     <!-- history-lines -->
     <div class="cli-history"
      v-for="(hist, i) in histories"
@@ -22,7 +22,7 @@
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
-      <InputCli @exec-cmd="inputEvent" />
+      <CLIInput @exec-cmd="inputEnter" />
     </div>
     <!--  -->
   </div>
@@ -30,8 +30,8 @@
 
 <script>
 // Vue Component
-import TerminalStart from './TerminalStart.vue'
-import InputCli from './InputCli.vue'
+import CLIStart from './CLIStart.vue'
+import CLIInput from './CLIInput.vue'
 
 // JS func
 import cmd_cd from './commands/cd'
@@ -39,15 +39,15 @@ import cmd_ls from './commands/ls'
 
 
 export default {
-  name: 'Terminal',
+  name: 'CLI',
   components: {
-    TerminalStart,
-    InputCli
+    CLIStart,
+    CLIInput
   },
 
   data() {
     return {
-      inputText: "", // emitted: InputCli
+      inputText: "", // emitted: CLIInput
       dir: ["~", "cli"], // current directory (array)
       histories: [
         // {input: "", dir: [], result_ary: []} ...
@@ -56,8 +56,8 @@ export default {
   },
 
   methods: {
-    inputEvent(value) {
-      const result_ary = this.terminalProc(value)
+    inputEnter(value) {
+      const result_ary = this.cmdProcess(value)
                          .split("\n");
       this.histories.push({
         input: value,
@@ -66,7 +66,7 @@ export default {
       });
     },
 
-    terminalProc(input) {
+    cmdProcess(input) {
       if  (input === "")  {
         return "";
       } else if (/^help\s*$/.test(input)) {
@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style scoped>
-.terminal {
+.cli-main {
   padding: 10px;
 }
 
