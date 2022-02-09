@@ -23,13 +23,15 @@ export default {
   methods: {
     pressKeyEnter() {
       this.$emit("exec-cmd", this.inputText);
-      this.history.push(this.inputText);
-      this.historyIndex = this.history.length;
-      this.inputText = ""
+      if (this.inputText !== "") {
+        this.history.push(this.inputText);
+        this.historyIndex = this.history.length;
+        this.inputText = ""
+      }
     },
 
     pressKeyUp(e) {
-      e.preventDefault();
+      e.preventDefault(); // 上キーを押したときにカーソルが先頭に行くのを防ぐ
       if (this.history.length > 0) {
         this.historyIndex = Math.max(this.historyIndex - 1, 0);
         this.inputText = this.history[this.historyIndex];
