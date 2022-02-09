@@ -31,7 +31,7 @@ button, input, optgroup, select, textarea {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  vertical-align: middle;
+  /* vertical-align: middle; */
   color: inherit;
   font: inherit;
   border: 0;
@@ -62,5 +62,6 @@ a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--font-main);
+  font-family: 'Roboto Mono', monospace;
 }
 </style>

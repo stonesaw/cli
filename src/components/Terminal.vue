@@ -2,16 +2,19 @@
   <div class="terminal" ref="cli">
     <TerminalStart />
     <!-- history-lines -->
-    <div
-     v-for="(hist, i) in cui_histories"
+    <div class="cli-history"
+     v-for="(hist, i) in histories"
      :key="i"
     >
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ hist.dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
       <span class="cli-input-history">{{ hist.input }}</span>
-      <div>
-        <span class="cli-result">{{ hist.result }}</span>
+      <div
+       v-for="(result, i) in hist.result_ary"
+       :key="i"
+      >
+        <span class="cli-result">{{ result }}</span>
       </div>
     </div>
     <!--  -->
@@ -46,28 +49,38 @@ export default {
     return {
       inputText: "", // emitted: InputCli
       dir: ["~", "cli"], // current directory (array)
-      cui_histories: [
-        // {input: "", dir: "", result: ""} ...
+      histories: [
+        // {input: "", dir: [], result_ary: []} ...
       ]
     }
   },
 
   methods: {
     inputEvent(value) {
-      const result =  this.terminalProc(value);
-      this.cui_histories.push({
+      const result_ary = this.terminalProc(value)
+                         .split("\n");
+      this.histories.push({
         input: value,
         dir: this.dir,
-        result: result
+        result_ary: result_ary
       });
     },
 
     terminalProc(input) {
       if  (input === "")  {
         return "";
-      } else if (input.match(/(^cd$)|(^cd\s\w+$)/) !== null) {
+      } else if (/^help\s*$/.test(input)) {
+        return `Command list
+                cat [file]
+                cd [dir]
+                history
+                ls
+                open
+                share
+                `
+      } else if (/(^cd$)|(^cd\s\w+$)/.test(input)) {
         return cmd_cd(input, this.dir);
-      } else if (input.match(/^ls$/) !== null) {
+      } else if (/^ls\s*$/.test(input)) {
         return cmd_ls(input, this.dir);
       } else {
         return `Command '${input}' is not found! Use 'help' to see the command list.`;
@@ -79,7 +92,6 @@ export default {
 
 <style scoped>
 .terminal {
-  font-family: 'Roboto Mono', monospace;
   padding: 10px;
 }
 
