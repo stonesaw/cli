@@ -3,9 +3,9 @@ import directory from './../../assets/directory.json'
 import { is_exist_dir } from  './utils'
 
 
-export default function (input, current_dit) {
-    return `do cd command (${input}, ${current_dit})`; 
-    // if (current_dit === "~") {
+export default function (input, current_dir) {
+    return `do cd command (${input}, ${current_dir})`; 
+    // if (current_dir === "~") {
     //     // do something
     //     return `root directory`;
 
