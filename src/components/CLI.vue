@@ -86,7 +86,7 @@ export default {
             // have a -clear flag
             this.$refs.input.clearHistory();
           }
-          return cmd_history(args.shift);
+          return cmd_history(args.splice(1));
         default:
           return `Command '${args[0]}' is not found! Use 'help' to see the command list.`;
       }
