@@ -1,5 +1,5 @@
-# 🎈 [cli](https://github.com/stonesaw/stonesaw.github.io/cli)
-https://github.com/stonesaw/stonesaw.github.io  
+# 🎈 [cli](https://stonesaw.github.io/cli)
+https://stonesaw.github.io/cli  
 [ 🔨 Building now ...]  
 Implement the cli interface on the web  
 
