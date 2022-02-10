@@ -1,12 +1,12 @@
 <template>
-  <span class="cli-input"
-   @keydown.up="pressKeyUp"
-   @keydown.down="pressKeyDown"
-  >
-    <input type="text" v-model="inputText"
-     autofocus maxlength="30"
-     @keydown.enter="pressKeyEnter"
-    >
+  <span class="cli-input" @keydown.up="pressKeyUp" @keydown.down="pressKeyDown">
+    <input
+      type="text"
+      v-model="inputText"
+      autofocus
+      maxlength="30"
+      @keydown.enter="pressKeyEnter"
+    />
   </span>
 </template>
 
@@ -16,8 +16,8 @@ export default {
     return {
       inputText: "",
       history: [],
-      historyIndex: null
-    }
+      historyIndex: null,
+    };
   },
 
   mounted() {
@@ -26,22 +26,22 @@ export default {
 
   methods: {
     loadHistory() {
-      if (localStorage.getItem('history')) {
+      if (localStorage.getItem("history")) {
         try {
-          this.history = JSON.parse(localStorage.getItem('history'));
-        } catch(e) {
-          localStorage.removeItem('history');
+          this.history = JSON.parse(localStorage.getItem("history"));
+        } catch (e) {
+          localStorage.removeItem("history");
         }
       }
     },
 
     saveHistory() {
       const parsed = JSON.stringify(this.history);
-      localStorage.setItem('history', parsed);
+      localStorage.setItem("history", parsed);
     },
 
+    // called from CLI
     clearHistory() {
-      console.log("clear on CLIInput");
       this.history = [];
     },
 
@@ -50,7 +50,7 @@ export default {
       if (this.inputText !== "") {
         this.history.push(this.inputText);
         this.historyIndex = this.history.length;
-        this.inputText = ""
+        this.inputText = "";
         this.saveHistory();
       }
     },
@@ -70,17 +70,20 @@ export default {
           this.historyIndex = null;
           this.inputText = "";
         } else {
-          this.historyIndex = Math.min(this.historyIndex + 1, this.history.length - 1);
+          this.historyIndex = Math.min(
+            this.historyIndex + 1,
+            this.history.length - 1
+          );
           this.inputText = this.history[this.historyIndex];
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
 .cli-input > input {
-  width: 50%
+  width: 50%;
 }
 </style>

@@ -7,7 +7,7 @@ import {
 } from  './utils'
 
 
-export default function (input, current_dir) {
+export default function (current_dir, options) {
     return "file list"
     // if (is_exist_dir(current_dir)) {
         

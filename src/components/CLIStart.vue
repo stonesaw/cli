@@ -10,13 +10,3 @@
     <div>Welcome to cli</div>
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
-</style>

@@ -1,10 +1,10 @@
 // history with Web
-export default function (input) {
-    if (/-clear/.test(input)) {
+export default function (options) {
+    if (options.includes("-clear")) {
       localStorage.removeItem('history');
       return `clear history`
     }
-    
+
     var history = [];
     if (localStorage.getItem('history')) {
         try {
