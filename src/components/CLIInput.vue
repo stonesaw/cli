@@ -20,13 +20,38 @@ export default {
     }
   },
 
+  mounted() {
+    this.loadHistory();
+  },
+
   methods: {
+    loadHistory() {
+      if (localStorage.getItem('history')) {
+        try {
+          this.history = JSON.parse(localStorage.getItem('history'));
+        } catch(e) {
+          localStorage.removeItem('history');
+        }
+      }
+    },
+
+    saveHistory() {
+      const parsed = JSON.stringify(this.history);
+      localStorage.setItem('history', parsed);
+    },
+
+    clearHistory() {
+      console.log("clear on CLIInput");
+      this.history = [];
+    },
+
     pressKeyEnter() {
       this.$emit("exec-cmd", this.inputText);
       if (this.inputText !== "") {
         this.history.push(this.inputText);
         this.historyIndex = this.history.length;
         this.inputText = ""
+        this.saveHistory();
       }
     },
 
