@@ -17,14 +17,25 @@ export default {
 
 <style>
 :root {
-  --font-main: rgba(255, 255, 255, .85);
-  --bg-main: #222;
+  --color-default: rgba(0, 0, 0, 0);
+  --color-font-main: rgba(255, 255, 255, .85);
+  ---color-bg-main: #222;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  /* scrollbar */
+  -ms-overflow-style: none;    /* IE, Edge */
+  scrollbar-width: none;       /* Firefox */
 }
 
 html, body {
-  padding: 0;
-  margin: 0;
-  background-color: var(--bg-main);
+  background-color: var(---color-bg-main);
+}
+
+::-webkit-scrollbar {  /* Chrome, Safari */
+  display:none;
 }
 
 button, input, optgroup, select, textarea {
@@ -35,22 +46,20 @@ button, input, optgroup, select, textarea {
   color: inherit;
   font: inherit;
   border: 0;
-  background: rgba(0, 0, 0, 0);
-  padding: 0;
-  margin: 0;
+  background: var(--color-default);
   outline: 0;
   border-radius: 0;
   text-align: inherit;
 }
 
 ::-moz-selection { /* Code for Firefox */
-  color: var(--bg-main);
-  background: var(--font-main);
+  color: var(---color-bg-main);
+  background: var(--color-font-main);
 }
 
 ::selection {
-  color: var(--bg-main);
-  background: var(--font-main);
+  color: var(---color-bg-main);
+  background: var(--color-font-main);
 }
 
 a {
@@ -61,7 +70,7 @@ a {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--font-main);
+  color: var(--color-font-main);
   font-family: 'Roboto Mono', monospace;
 }
 </style>
