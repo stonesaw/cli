@@ -8,7 +8,7 @@
       <span class="cli-head"> $ </span>
       <span class="cli-input-history">{{ hist.input }}</span>
       <div v-for="(result, i) in hist.result_ary" :key="i">
-        <!-- (!) TODO: measures XSS -->
+        <!-- (!) Be careful with XSS -->
         <span class="cli-result" v-html="result"></span>
       </div>
     </div>
@@ -53,6 +53,9 @@ export default {
   methods: {
     inputEnter(value) {
       const result_ary = this.cmdProcess(value)
+                             .replaceAll("&", "&amp;")
+                             .replaceAll("<", "&lt;")
+                             .replaceAll(">", "&gt;")
                              .replaceAll(" ", "&nbsp;")
                              .split("\n");
       this.histories.push({
