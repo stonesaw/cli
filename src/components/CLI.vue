@@ -32,12 +32,20 @@ import CLIInput from "./CLIInput.vue";
 import cmd_cd from "./commands/cd";
 import cmd_ls from "./commands/ls";
 import cmd_history from "./commands/history";
+import cmd_cat from "./commands/cat";
 
 export default {
   name: "CLI",
   components: {
     CLIStart,
     CLIInput,
+  },
+
+  props: {
+    editor_mode: {
+     type: Boolean,
+     default: false
+    }
   },
 
   data() {
@@ -51,6 +59,24 @@ export default {
   },
 
   methods: {
+    openEditor() {
+      if (this.editor_mode === false) {
+        this.$emit("editor-mode", true);
+        return "";
+      } else {
+        return "editor is already open.";
+      }
+    },
+
+    closeEditor() {
+      if (this.editor_mode === true) {
+        this.$emit("editor-mode", false);
+        return "";
+      } else {
+        return "editor is not open.";
+      }
+    },
+
     inputEnter(value) {
       const result_ary = this.cmdProcess(value)
                              .replaceAll("&", "&amp;")
@@ -73,13 +99,16 @@ export default {
       switch (args[0]) {
         case "help":
           return `Command list
-                cat [file]
-                cd [dir]
-                history [-clear]
-                ls
-                open
-                share
-                `;
+cd [dir]
+ls
+history [-clear]
+lang [en|ja]
+open [link]
+editor [-close|-C]
+share
+
+and some secret commands ...
+`;
         case "cd":
           return cmd_cd(this.dir, args[1]);
         case "ls":
@@ -90,6 +119,14 @@ export default {
             this.$refs.input.clearHistory();
           }
           return cmd_history(args.splice(1));
+        case "cat":
+          return cmd_cat(this.dir, args[1]);
+        case "editor":
+          if (args[1] === "-close" || args[1] === "-C") {
+            return this.closeEditor(); // return msg
+          } else {
+            return this.openEditor(); // return msg
+          }
         default:
           return `Command '${args[0]}' is not found! Use 'help' to see the command list.`;
       }

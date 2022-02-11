@@ -1,17 +1,38 @@
 <template>
-  <div id="app">
-    <CLI />
+  <div id="app" >
+    <MonacoEditor 
+      v-if="editor_mode"
+      v-model="code"
+      ref="editor"
+      class="editor"
+      theme="vs-dark"
+      language="javascript"
+    />
+    <CLI
+      :class="{ 'editor-mode': editor_mode }"
+      :editor_mode="editor_mode"
+      @editor-mode="editor_mode = $event"
+    />
   </div>
 </template>
 
 <script>
+import MonacoEditor from 'vue-monaco'
 import CLI from './components/CLI.vue'
 
 export default {
   name: 'App',
   components: {
-    CLI
-  }
+    CLI,
+    MonacoEditor
+  },
+  
+  data() {
+    return {
+      editor_mode: false,
+      code: "// your code here ...\n\nconst msg = 'hello, world!';\nconsole.log(msg);"
+    }
+  },
 }
 </script>
 
@@ -72,5 +93,16 @@ a {
   -moz-osx-font-smoothing: grayscale;
   color: var(--color-font-main);
   font-family: 'Roboto Mono', monospace;
+}
+
+.editor-mode {
+  overflow: scroll;
+  height: calc(30vh - 20px); 
+  border-top: .5px solid gray;
+}
+
+.editor {
+  width: 100%;
+  height: 70vh;
 }
 </style>
