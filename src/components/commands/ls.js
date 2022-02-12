@@ -8,7 +8,7 @@ import {
 
 
 export default function (current_dir, options) {
-    return "file list"
+    return ["file list", null];
     // if (is_exist_dir(current_dir)) {
         
     // } else {

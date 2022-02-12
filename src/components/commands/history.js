@@ -2,7 +2,7 @@
 export default function (options) {
     if (options.includes("-clear")) {
       localStorage.removeItem('history');
-      return `clear history`
+      return [`clear history`, null];
     }
 
     var history = [];
@@ -13,12 +13,12 @@ export default function (options) {
           localStorage.removeItem('history');
         }
     } else {
-        return `no history`
+        return [`no history`, null];
     }
     var len = Math.log10(history.length) + 1;
     var str = "";
     history.forEach((element, i) => {
         str += ` ${i.toString().padStart(len, " ")}  ${element}\n`;
     });
-    return str;
+    return [str, null];
 }
