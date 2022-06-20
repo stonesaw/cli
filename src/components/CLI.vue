@@ -103,7 +103,7 @@ and some secret commands ...`, null];
         case "cd":
           return cmd_cd(this.dir, args[1]);
         case "ls":
-          return cmd_ls(this.dir, args.shift);
+          return cmd_ls(this.dir, args.splice(1, args.length - 1));
         case "history":
           if (args[1] === "-clear") {
             this.$refs.input.clearHistory();
