@@ -4,7 +4,7 @@
       type="text"
       v-model="inputText"
       autofocus
-      maxlength="30"
+      maxlength="50"
       @keydown.enter="pressKeyEnter"
     />
   </span>
