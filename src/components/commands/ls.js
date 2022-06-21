@@ -6,18 +6,13 @@ import {
 
 export default function (current_dir, options) {
     const target_dir = pathHelper(current_dir, options[0]);
-
-    var current_dir_content = directory;
-    for (let index = 0; index < target_dir.length; index++) {
-        const element = target_dir[index];
-        if (current_dir_content[element] == undefined) {
-            return ["そのようなファイルやディレクトリはありません", null];
-        }
-        current_dir_content = current_dir_content[element];
+    if (target_dir["error"] != undefined) {
+        return [target_dir["error"], null];
     }
 
     var str = "";
-    for (const [key, value] of Object.entries(current_dir_content)) {
+    for (const [key, value] of Object.entries(target_dir.files_list)) {
+        // TODO: fix typeof
         if (typeof value === typeof {}) {
             str = str.concat(key, "/   "); // directory
         } else {
