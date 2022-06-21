@@ -2,28 +2,43 @@ import directory from './../../assets/directory.json'
 
 // return target Dir
 function pathHelper(current_dir, target_dir = "./") {
-    var dir = target_dir.split("/").filter(element => element !== "" && element !== ".");
-    var result_ary = current_dir.concat(dir);
+    // TODO: regexp target_dir
+    var target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
+    var result_ary = current_dir.concat(target_dir_ary); // ["~", "cli", "src", ".."]
 
-    let index = 0;
-    while (index < result_ary.length) {
-        if (result_ary[index] === "..") {
-            for (let j = index - 1; j >= 0; j--) {
-                if (result_ary[j] !== null) {
-                    result_ary.splice(j, 1, null);
-                    break;
-                }
+    // complete path
+    var current = directory;
+    var hist = [];
+    var dirs = [];
+    for (let index = 0; index < result_ary.length; index++) {
+        const element = result_ary[index];
+        console.log(dirs);
+        if (element === "..") { // ref parent dir
+            if (dirs.length <= 0) {
+                // hasn't parent
+            } else {
+                current = hist[hist.length - 1] || directory;
+                hist.pop();
+                dirs.pop();
             }
-            result_ary.splice(index, 1, null);
+        } else if (current[element] == undefined) {
+            return {error: "そのようなファイルやディレクトリはありません"};
+        } else {
+            hist.push(current);
+            dirs.push(element);
+            current = current[element];
         }
-        index++;
-    }
-    result_ary = result_ary.filter(e => e !== null)
-    if (result_ary[0] !== "~") {
-        result_ary.unshift("~");
     }
 
-    return result_ary;
+    if (dirs[0] !== "~") {
+        dirs.unshift("~");
+        current = current["~"];
+    }
+
+    return {
+        dirs: dirs,
+        files_list: current
+    };
 }
 
 function isExistDir(target) {
