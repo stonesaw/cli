@@ -1,15 +1,13 @@
-/* eslint-disable no-unused-vars */
-import directory from './../../assets/directory.json'
-import { is_exist_dir } from  './utils'
+import { pathHelper } from  './utils'
 
+export default function (current_dir, options) {
+    const target_dir = pathHelper(current_dir, options[0]);
+    if (target_dir["error"] != undefined) {
+        return {error: target_dir["error"]};
+    }
 
-export default function (current_dir, target_dir) {
-    return [`change directory (${current_dir} -> ${target_dir})`, null];
-    // if (current_dir === "~") {
-    //     // do something
-    //     return `root directory`;
-
-    // } else if (is_exist_dir(directory, 0)) {
-    //     // 
-    // }
+    return {
+        msg: `debug: cd (${current_dir.join("/")} -> ${target_dir.dirs.join("/")})`,
+        data: target_dir.dirs
+    };
 }

@@ -15,7 +15,7 @@
     <!-- input -->
     <div>
       <span class="cli-head">stonesaw.github.io </span>
-      <span class="cli-dir">{{ dir.join("/") }}</span>
+      <span class="cli-dir">{{ working_dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
       <CLIInput @exec-cmd="inputEnter" ref="input" />
     </div>
@@ -51,10 +51,12 @@ export default {
   data() {
     return {
       inputText: "", // emitted: CLIInput
-      dir: ["~", "cli"], // current directory (array)
+      working_dir: ["~", "cli"], // current directory (array)
       histories: [
         // {input: "", dir: [], result_ary: []} ...
       ],
+
+      afterInputActions: []
     };
   },
 
@@ -75,9 +77,15 @@ export default {
       }
       this.histories.push({
         input: value,
-        dir: this.dir,
+        dir: this.working_dir,
         result_ary: result,
       });
+
+      // call after input action
+      this.afterInputActions.forEach(element => {
+        element(this);
+      });
+      this.afterInputActions = []
     },
 
     execCommand(input) {
@@ -100,18 +108,30 @@ editor [-close|-C]
 share
 
 and some secret commands ...`, null];
-        case "cd":
-          return cmd_cd(this.dir, args[1]);
-        case "ls":
-          return cmd_ls(this.dir, args.splice(1, args.length - 1));
-        case "history":
+        case "cd": {
+          let cd = cmd_cd(this.working_dir, args.splice(1));
+          if (cd["error"] != undefined) {
+            return [cd["error"], null];
+          } else {
+            this.afterInputActions.push(function(component) {
+              component.working_dir = cd.data;
+            })
+            return ["", null];
+          }
+        }
+        case "ls": {
+          return cmd_ls(this.working_dir, args.splice(1));
+        }
+        case "history": {
           if (args[1] === "-clear") {
             this.$refs.input.clearHistory();
           }
           return cmd_history(args.splice(1));
-        case "cat":
-          return cmd_cat(this.dir, args[1]);
-        case "editor":
+        }
+        case "cat": {
+          return cmd_cat(this.working_dir, args[1]);
+        }
+        case "editor": {
           if (args[1] === "-close" || args[1] === "-C") {
             // returned msg
             return [this.closeEditor(), null];
@@ -119,11 +139,13 @@ and some secret commands ...`, null];
             // returned msg
             return [this.openEditor(), null];
           }
-        default:
+        }
+        default: {
           return [
             `Command '${args[0]}' is not found! Use 'help' to see the command list.`,
             null
           ];
+        }
       }
     },
 
