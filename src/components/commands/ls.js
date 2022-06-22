@@ -6,8 +6,10 @@ import {
 
 export default function (current_dir, options) {
     const target_dir = pathHelper(current_dir, options[0]);
-    if (target_dir["error"] != undefined) {
-        return [target_dir["error"], null];
+    if (target_dir.error != undefined) {
+        return [target_dir.error, null];
+    } else if (target_dir.type !== "dir") {
+        return [`${options[0]}: ディレクトリではありません`, null];
     }
 
     var str = "";

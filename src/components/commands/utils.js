@@ -2,17 +2,15 @@ import directory from './../../assets/directory.json'
 
 // return target Dir
 function pathHelper(current_dir, target_dir = "./") {
-    // TODO: regexp target_dir
-    var target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
-    var result_ary = current_dir.concat(target_dir_ary); // ["~", "cli", "src", ".."]
+    let target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
+    let result_ary = (target_dir[0] === "~" ? target_dir_ary : current_dir.concat(target_dir_ary));
 
     // complete path
-    var current = directory;
-    var hist = [];
-    var dirs = [];
+    let current = directory;
+    let hist = [];
+    let dirs = [];
     for (let index = 0; index < result_ary.length; index++) {
         const element = result_ary[index];
-        console.log(dirs);
         if (element === "..") { // ref parent dir
             if (dirs.length <= 0) {
                 // hasn't parent
@@ -35,19 +33,23 @@ function pathHelper(current_dir, target_dir = "./") {
         current = current["~"];
     }
 
+    // check type ( dir | txt | img ... )
+    let type = (typeof current === typeof {} ? "dir" : current);
+
     return {
         dirs: dirs,
+        type: type,
         files_list: current
     };
 }
 
 function isExistDir(target) {
-    for (let i = 0; i <= target.length - 1; i++)  {
-        if (directory[target[i]] === undefined) {
-            return false;
-        }
-    }
-    return true;
+    // for (let i = 0; i <= target.length - 1; i++)  {
+    //     if (directory[target[i]] === undefined) {
+    //         return false;
+    //     }
+    // }
+    // return true;
 }
 
 export {
