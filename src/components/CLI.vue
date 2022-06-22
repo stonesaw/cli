@@ -62,18 +62,15 @@ export default {
 
   methods: {
     inputEnter(value) {
-      const executed = this.execCommand(value)
+      const executed = this.execCommand(value);
       var result;
       if (executed[1] === "html") {
         // print listed, colored with html
         result = executed[0].split("\n");
       } else {
         // print plane text
-        result = executed[0].replaceAll("&", "&amp;")
-                    .replaceAll("<", "&lt;")
-                    .replaceAll(">", "&gt;")
-                    .replaceAll(" ", "&nbsp;")
-                    .split("\n");
+        result = this.textToHtml(executed[0]).split("\n");
+        result = result.map(x => x === "" ? "&nbsp;" : x);
       }
       this.histories.push({
         input: value,
@@ -82,8 +79,8 @@ export default {
       });
 
       // call after input action
-      this.afterInputActions.forEach(element => {
-        element(this);
+      this.afterInputActions.forEach(callback => {
+        callback(this);
       });
       this.afterInputActions = []
     },
@@ -100,7 +97,7 @@ export default {
           return [
             `Command list
 cd [dir]
-ls
+ls [dir]
 history [-clear]
 lang [en|ja]
 open [link]
@@ -165,6 +162,13 @@ and some secret commands ...`, null];
       } else {
         return "editor is not open.";
       }
+    },
+
+    textToHtml(str) {
+      return str.replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll(" ", "&nbsp;");
     },
   },
 };
