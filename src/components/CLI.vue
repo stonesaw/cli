@@ -64,7 +64,9 @@ export default {
     inputEnter(value) {
       const executed = this.execCommand(value);
       var result;
-      if (executed[1] === "html") {
+      if (executed[0] === null) {
+        result = null;
+      } else if (executed[1] === "html") {
         // print listed, colored with html
         result = executed[0].split("\n");
       } else {
@@ -90,7 +92,7 @@ export default {
       // flag: null or "html"
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0) {
-        return ["", null];
+        return [null, null];
       }
       switch (args[0]) {
         case "help":
@@ -113,7 +115,7 @@ and some secret commands ...`, null];
             this.afterInputActions.push(function(component) {
               component.working_dir = cd.data;
             })
-            return ["", null];
+            return [null, null];
           }
         }
         case "ls": {
