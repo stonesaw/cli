@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import * as types from "./../types"
 import {
     directory,
     pathHelper
@@ -14,8 +15,7 @@ export default function (current_dir, options) {
 
     var str = "";
     for (const [key, value] of Object.entries(target_dir.files_list)) {
-        // TODO: fix typeof
-        if (typeof value === typeof {}) {
+        if (types.isObject(value)) {
             str = str.concat(key, "/   "); // directory
         } else {
             str = str.concat(key, "    "); // file

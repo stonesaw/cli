@@ -1,4 +1,5 @@
 import directory from './../../assets/directory.json'
+import * as types from './../types';
 
 // return target Dir
 function pathHelper(current_dir, target_dir = "./") {
@@ -34,7 +35,7 @@ function pathHelper(current_dir, target_dir = "./") {
     }
 
     // check type ( dir | txt | img ... )
-    let type = (typeof current === typeof {} ? "dir" : current);
+    let type = (types.isObject(current) ? "dir" : current);
 
     return {
         dirs: dirs,
@@ -43,17 +44,17 @@ function pathHelper(current_dir, target_dir = "./") {
     };
 }
 
-function isExistDir(target) {
+// function isExistDir(target) {
     // for (let i = 0; i <= target.length - 1; i++)  {
     //     if (directory[target[i]] === undefined) {
     //         return false;
     //     }
     // }
     // return true;
-}
+// }
 
 export {
     directory,
     pathHelper,
-    isExistDir
+    // isExistDir
 };
