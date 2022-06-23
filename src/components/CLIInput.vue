@@ -47,12 +47,12 @@ export default {
 
     pressKeyEnter() {
       this.$emit("exec-cmd", this.inputText);
-      if (this.inputText !== "") {
+      if (this.inputText !== "" && this.history[this.history.length - 1] !== this.inputText) {
         this.history.push(this.inputText);
         this.historyIndex = this.history.length;
-        this.inputText = "";
         this.saveHistory();
       }
+      this.inputText = "";
     },
 
     pressKeyUp(e) {

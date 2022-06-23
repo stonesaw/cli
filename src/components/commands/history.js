@@ -20,5 +20,5 @@ export default function (options) {
     history.forEach((element, i) => {
         str += ` ${i.toString().padStart(len, " ")}  ${element}\n`;
     });
-    return [str, null];
+    return [str.replace(/\n$/, ""), null];
 }
