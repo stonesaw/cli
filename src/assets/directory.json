@@ -1,10 +1,19 @@
 {
   "~": {
     "cli": {
-      "README.md": "txt",
+      "README.md": [
+        "txt",
+        "# 🎈 [cli](https://stonesaw.github.io/cli)\nhttps://stonesaw.github.io/cli  \n[ 🔨 Building now ...]  \nImplement the cli interface on the web  \n\n\n## ✨ Features\n```bash\nstonesaaw.github.io> cd portfolio\n                     # => Redirecting to portfolio/\n\nstonesaaw.github.io> ls\n                     # => portfolio/\n                     # => blog/\n                     # => ...\n```\n"
+      ],
+      "repo.link": [
+        "link",
+        "https://github.com/stonesaw/cli"
+      ],
       "src": {
         "assets": {
-          "logo.png": "img"
+          "logo.png": [
+            "img"
+          ]
         }
       }
     }

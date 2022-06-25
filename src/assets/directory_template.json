@@ -1,0 +1,13 @@
+{
+  "~": {
+    "cli": {
+      "README.md": ["txt", null],
+      "repo.link": ["link", "https://github.com/stonesaw/cli"],
+      "src": {
+        "assets": {
+          "logo.png": ["img"]
+        }
+      }
+    }
+  }
+}

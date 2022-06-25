@@ -1,5 +1,5 @@
-import directory from './../../assets/directory.json'
-import * as types from './../types';
+const directory = require('../../assets/directory.json')
+const types = require('./../types')
 
 function isPresent(obj) {
   return (obj != null && obj != undefined && obj !== [] && obj !== {})

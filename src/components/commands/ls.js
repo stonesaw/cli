@@ -1,9 +1,5 @@
-/* eslint-disable no-unused-vars */
-import * as types from "./../types"
-import {
-  directory,
-  pathHelper
-} from './utils';
+const types = require('./../types')
+import { pathHelper } from './utils';
 
 export default function (current_dir, options) {
   const target_dir = pathHelper(current_dir, options[0]);
