@@ -1,6 +1,6 @@
 function isType(type, obj) {
-    var toString = Object.prototype.toString.call(obj).slice(8, -1);
-    return obj !== undefined && obj !== null && toString === type;
+  var toString = Object.prototype.toString.call(obj).slice(8, -1);
+  return obj !== undefined && obj !== null && toString === type;
 }
 
 function type(obj) {
