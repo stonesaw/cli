@@ -40,12 +40,20 @@ function pathHelper(current_dir, target_dir = "./") {
 
     // check type ( dir | txt | img ... )
     let type = (types.isObject(current) ? "dir" : current);
+    if (type === "dir") {
+        return {
+            dirs: dirs,
+            type: type,
+            files_list: current
+        };
+    } else {
+        return {
+            dirs: dirs,
+            type: current[0],
+            content: current[1]
+        };
+    }
 
-    return {
-        dirs: dirs,
-        type: type,
-        files_list: current
-    };
 }
 
 // function isExistDir(target) {
