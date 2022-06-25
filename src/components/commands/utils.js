@@ -1,6 +1,10 @@
 import directory from './../../assets/directory.json'
 import * as types from './../types';
 
+function isPresent(obj) {
+    return (obj != null && obj != undefined && obj !== [] && obj !== {})
+}
+
 // return target Dir
 function pathHelper(current_dir, target_dir = "./") {
     let target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
@@ -54,6 +58,7 @@ function pathHelper(current_dir, target_dir = "./") {
 // }
 
 export {
+    isPresent,
     directory,
     pathHelper,
     // isExistDir
