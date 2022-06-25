@@ -1,6 +1,6 @@
 <template>
-  <div id="app" >
-    <MonacoEditor 
+  <div id="app">
+    <MonacoEditor
       v-if="editor_mode"
       v-model="code"
       ref="editor"
@@ -12,6 +12,7 @@
       :class="{ 'editor-mode': editor_mode }"
       :editor_mode="editor_mode"
       @editor-mode="editor_mode = $event"
+      ref="cli"
     />
   </div>
 </template>
@@ -26,13 +27,39 @@ export default {
     CLI,
     MonacoEditor
   },
-  
+
   data() {
     return {
       editor_mode: false,
       code: "// your code here ...\n\nconst msg = 'hello, world!';\nconsole.log(msg);"
     }
   },
+
+  mounted() {
+    document.addEventListener('keydown', this.onKeyDown)
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.onKeyDown)
+  },
+
+  methods: {
+    onKeyDown() {
+      this.$refs.cli.focus();
+      // fix window.innerHeight
+      let element = document.documentElement;
+      let bottom = element.scrollHeight - element.clientHeight;
+      window.scroll(0, bottom);
+
+      // switch (event.key) {
+      //   case "Enter":
+      //     break;
+      //   default:
+      //     // any
+      //     break;
+      // }
+    },
+  }
 }
 </script>
 
@@ -97,7 +124,7 @@ a {
 
 .editor-mode {
   overflow: scroll;
-  height: calc(30vh - 20px); 
+  height: calc(30vh - 20px);
   border-top: .5px solid gray;
 }
 

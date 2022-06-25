@@ -61,6 +61,10 @@ export default {
   },
 
   methods: {
+    focus() {
+      this.$refs.input.focus();
+    },
+
     inputEnter(value) {
       const executed = this.execCommand(value);
       var result;
@@ -100,11 +104,12 @@ export default {
             `Command list
 cd [dir]
 ls [dir]
+cat [file]
 history [-clear]
 lang [en|ja]
 open [link]
 editor [-close|-C]
-share
+share [twitter|link]
 
 and some secret commands ...`, null];
         case "cd": {
@@ -128,7 +133,7 @@ and some secret commands ...`, null];
           return cmd_history(args.splice(1));
         }
         case "cat": {
-          return cmd_cat(this.working_dir, args[1]);
+          return cmd_cat(this.working_dir, args.splice(1));
         }
         case "editor": {
           if (args[1] === "-close" || args[1] === "-C") {
@@ -137,6 +142,13 @@ and some secret commands ...`, null];
           } else {
             // returned msg
             return [this.openEditor(), null];
+          }
+        }
+        case "share": {
+          if (args[1] === "twitter") {
+            return ["open twitter", null];
+          } else {
+            return ["<u>https://stonesaw.github.io/cli/</u>", "html"];
           }
         }
         default: {
@@ -178,7 +190,7 @@ and some secret commands ...`, null];
 
 <style scoped>
 .cli-main {
-  padding: 10px;
+  padding: 6px 10px;
 }
 
 .cli-head {

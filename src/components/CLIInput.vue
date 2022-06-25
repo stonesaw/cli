@@ -6,6 +6,7 @@
       autofocus
       maxlength="50"
       @keydown.enter="pressKeyEnter"
+      ref="input"
     />
   </span>
 </template>
@@ -25,6 +26,10 @@ export default {
   },
 
   methods: {
+    focus() {
+      this.$refs.input.focus();
+    },
+
     loadHistory() {
       if (localStorage.getItem("history")) {
         try {
