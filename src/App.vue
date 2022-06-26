@@ -46,7 +46,7 @@ export default {
   methods: {
     onKeyDown() {
       this.$refs.cli.focus();
-      // fix window.innerHeight
+      // TODO: scroll when editor_mode && focused cli-input
       let element = document.documentElement;
       let bottom = element.scrollHeight - element.clientHeight;
       window.scroll(0, bottom);

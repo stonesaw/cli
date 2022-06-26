@@ -59,7 +59,9 @@ export default {
 
   methods: {
     focus() {
-      this.$refs.input.focus();
+      if (!this.editor_mode) {
+        this.$refs.input.focus();
+      }
     },
 
     inputEnter(value) {
@@ -114,7 +116,7 @@ and some secret commands ...`, null];
           if (cd["error"] != undefined) {
             return [cd["error"], null];
           } else {
-            this.afterInputActions.push(function(component) {
+            this.afterInputActions.push(function (component) {
               component.working_dir = cd.data;
             })
             return [null, null];
