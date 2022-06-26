@@ -1,5 +1,5 @@
-const directory = require('../../assets/directory.json')
-const types = require('./../types')
+const directory = require('../assets/directory.json')
+const types = require('./types')
 
 function isPresent(obj) {
   return (obj != null && obj != undefined && obj !== [] && obj !== {})

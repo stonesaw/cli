@@ -29,10 +29,7 @@ import CLIStart from "./CLIStart.vue";
 import CLIInput from "./CLIInput.vue";
 
 // JS func
-import cmd_cd from "./commands/cd";
-import cmd_ls from "./commands/ls";
-import cmd_history from "./commands/history";
-import cmd_cat from "./commands/cat";
+import * as Commands from "./Commands";
 
 export default {
   name: "CLI",
@@ -113,7 +110,7 @@ share [twitter|link]
 
 and some secret commands ...`, null];
         case "cd": {
-          let cd = cmd_cd(this.working_dir, args.splice(1));
+          let cd = Commands.cd(this.working_dir, args.splice(1));
           if (cd["error"] != undefined) {
             return [cd["error"], null];
           } else {
@@ -124,16 +121,16 @@ and some secret commands ...`, null];
           }
         }
         case "ls": {
-          return cmd_ls(this.working_dir, args.splice(1));
+          return Commands.ls(this.working_dir, args.splice(1));
         }
         case "history": {
           if (args[1] === "-clear") {
             this.$refs.input.clearHistory();
           }
-          return cmd_history(args.splice(1));
+          return Commands.history(args.splice(1));
         }
         case "cat": {
-          return cmd_cat(this.working_dir, args.splice(1));
+          return Commands.cat(this.working_dir, args.splice(1));
         }
         case "editor": {
           if (args[1] === "-close" || args[1] === "-C") {
