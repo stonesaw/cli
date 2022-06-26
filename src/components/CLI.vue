@@ -146,7 +146,8 @@ and some secret commands ...`, null];
         }
         case "share": {
           if (args[1] === "twitter") {
-            return ["open twitter", null];
+            window.open("http://twitter.com/share?text=%F0%9F%AB%A1%20Hello,%20web-cli%0Acheck%20it%20...%20&url=https://stonesaw.github.io/cli/%0A&hashtags=indiedev,webdev,opensource&related=sou_0x0v");
+            return [`<a href="http://twitter.com/share?text=%F0%9F%AB%A1%20Hello,%20web-cli%0Acheck%20it%20...%20&url=https://stonesaw.github.io/cli/%0A&hashtags=indiedev,webdev,opensource&related=sou_0x0v" target="_blank">Share on Twitter</a>`, "html"];
           } else {
             return ["<u>https://stonesaw.github.io/cli/</u>", "html"];
           }
