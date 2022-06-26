@@ -99,14 +99,14 @@ export default {
         case "help":
           return [
             `Command list
-cd [dir]
-ls [dir]
-cat [file]
-history [-clear]
-lang [en|ja]
-open [link]
-editor [-close|-C]
-share [twitter|link]
+ * cd [dir]                 :change directory.
+ * ls [dir]                 :list segments.
+ * cat [file]               :show txt file content.
+ * history [-clear]         :command history.
+ * lang [en|ja]             :change language.
+ * open [link_file]         :open link file.
+ * editor [-close|-C]       :open editor.
+ * share [-tw]              :share sns.
 
 and some secret commands ...`, null];
         case "cd": {
@@ -142,7 +142,7 @@ and some secret commands ...`, null];
           }
         }
         case "share": {
-          if (args[1] === "twitter") {
+          if (args[1] === "-tw") {
             window.open("http://twitter.com/share?text=%F0%9F%AB%A1%20Hello,%20web-cli%0Acheck%20it%20...%20&url=https://stonesaw.github.io/cli/%0A&hashtags=indiedev,webdev,opensource&related=sou_0x0v");
             return [`<a href="http://twitter.com/share?text=%F0%9F%AB%A1%20Hello,%20web-cli%0Acheck%20it%20...%20&url=https://stonesaw.github.io/cli/%0A&hashtags=indiedev,webdev,opensource&related=sou_0x0v" target="_blank">Share on Twitter</a>`, "html"];
           } else {
