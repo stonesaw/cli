@@ -40,8 +40,8 @@ export default {
 
   props: {
     editor_mode: {
-     type: Boolean,
-     default: false
+      type: Boolean,
+      default: false
     }
   },
 
@@ -71,6 +71,7 @@ export default {
         result = null;
       } else if (executed[1] === "html") {
         // print listed, colored with html
+        // TODO: sanitize html
         result = executed[0].split("\n");
       } else {
         // print plane text
@@ -125,14 +126,21 @@ and some secret commands ...`, null];
         case "ls": {
           return Commands.ls(this.working_dir, args.splice(1));
         }
+        case "cat": {
+          return Commands.cat(this.working_dir, args.splice(1));
+        }
         case "history": {
           if (args[1] === "-clear") {
             this.$refs.input.clearHistory();
           }
           return Commands.history(args.splice(1));
         }
-        case "cat": {
-          return Commands.cat(this.working_dir, args.splice(1));
+        case "lang": {
+          // TODO
+          return ["set language : coming soon!", null];
+        }
+        case "open": {
+          return ["open link : coming soon!", null];
         }
         case "editor": {
           if (args[1] === "-close" || args[1] === "-C") {
