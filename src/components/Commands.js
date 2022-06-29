@@ -80,10 +80,25 @@ function history(options) {
   return [str.replace(/\n$/, ""), null];
 }
 
+function open(current_dir, options) {
+  if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {
+    return [`open help`, null];
+  }
+  const target_dir = pathHelper(current_dir, options[0]);
+  if (target_dir.error != undefined) {
+    return { error: target_dir.error };
+  } else if (target_dir.type !== "link") {
+    return { error: `${options[0]}: リンクではありません` };
+  } else {
+    return { data: target_dir.content };
+  }
+}
+
 
 export {
   cd,
   ls,
   cat,
-  history
+  history,
+  open
 }

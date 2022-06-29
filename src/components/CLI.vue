@@ -140,7 +140,13 @@ and some secret commands ...`, null];
           return ["set language : coming soon!", null];
         }
         case "open": {
-          return ["open link : coming soon!", null];
+          let open = Commands.open(this.working_dir, args.splice(1));
+          if (open.error) {
+            return [open.error, null];
+          } else {
+            window.open(open.data);
+            return [`open: ${open.data}`, null];
+          }
         }
         case "editor": {
           if (args[1] === "-close" || args[1] === "-C") {
