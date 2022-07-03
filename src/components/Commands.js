@@ -1,12 +1,9 @@
 const types = require('./types')
-import {
-  pathHelper,
-  isPresent
-} from './utils'
-
+import { isPresent } from './utils'
+import { showDirContent } from './DirHelper'
 
 function cd(current_dir, options) {
-  const target_dir = pathHelper(current_dir, options[0] || "~");
+  const target_dir = showDirContent(current_dir, options[0] || "~");
   if (target_dir.error != undefined) {
     return { error: target_dir["error"] };
   } else if (target_dir.type !== "dir") {
@@ -21,7 +18,7 @@ function cd(current_dir, options) {
 
 
 function ls(current_dir, options) {
-  const target_dir = pathHelper(current_dir, options[0]);
+  const target_dir = showDirContent(current_dir, options[0]);
   if (target_dir.error != undefined) {
     return [target_dir.error, null];
   } else if (target_dir.type !== "dir") {
@@ -45,7 +42,7 @@ function cat(current_dir, options) {
   if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {
     return [`cat help`, null];
   }
-  const target_dir = pathHelper(current_dir, options[0]);
+  const target_dir = showDirContent(current_dir, options[0]);
   if (target_dir.error != undefined) {
     return [target_dir.error, null];
   } else if (target_dir.type !== "txt") {
@@ -84,7 +81,7 @@ function open(current_dir, options) {
   if (!isPresent(options[0]) || options[0] === "-h" || options[0] === "--help") {
     return { msg: `open help` };
   }
-  const target_dir = pathHelper(current_dir, options[0]);
+  const target_dir = showDirContent(current_dir, options[0]);
   if (target_dir.error != undefined) {
     return { error: target_dir.error };
   } else if (target_dir.type !== "link") {
