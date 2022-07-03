@@ -18,6 +18,7 @@ export default {
       inputText: "",
       history: [],
       historyIndex: null,
+      inputCurrent: "",
     };
   },
 
@@ -54,15 +55,20 @@ export default {
       this.$emit("exec-cmd", this.inputText);
       if (this.inputText !== "" && this.history[this.history.length - 1] !== this.inputText) {
         this.history.push(this.inputText);
-        this.historyIndex = this.history.length;
+        this.historyIndex = null;
         this.saveHistory();
       }
       this.inputText = "";
+      this.inputCurrent = "";
     },
 
     pressKeyUp(e) {
       e.preventDefault(); // 上キーを押したときにカーソルが先頭に行くのを防ぐ
       if (this.history.length > 0) {
+        if (this.historyIndex === null) {
+          this.historyIndex = this.history.length;
+          this.inputCurrent = this.inputText;
+        }
         this.historyIndex = Math.max(this.historyIndex - 1, 0);
         this.inputText = this.history[this.historyIndex];
       }
@@ -73,7 +79,7 @@ export default {
       if (this.history.length > 0 && this.historyIndex !== null) {
         if (this.historyIndex === this.history.length - 1) {
           this.historyIndex = null;
-          this.inputText = "";
+          this.inputText = this.inputCurrent;
         } else {
           this.historyIndex = Math.min(
             this.historyIndex + 1,
