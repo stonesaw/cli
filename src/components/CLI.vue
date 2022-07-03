@@ -143,6 +143,8 @@ and some secret commands ...`, null];
           let open = Commands.open(this.working_dir, args.splice(1));
           if (open.error) {
             return [open.error, null];
+          } else if (open.msg) {
+            return [open.msg, null];
           } else {
             window.open(open.data);
             return [`open: ${open.data}`, null];

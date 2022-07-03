@@ -81,8 +81,8 @@ function history(options) {
 }
 
 function open(current_dir, options) {
-  if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {
-    return [`open help`, null];
+  if (!isPresent(options[0]) || options[0] === "-h" || options[0] === "--help") {
+    return { msg: `open help` };
   }
   const target_dir = pathHelper(current_dir, options[0]);
   if (target_dir.error != undefined) {
