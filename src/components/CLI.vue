@@ -17,7 +17,7 @@
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ working_dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
-      <CLIInput @exec-cmd="inputEnter" ref="input" />
+      <CLIInput @exec-cmd="inputEnter" @complement-dir="inputTab" ref="input" />
     </div>
     <!--  -->
   </div>
@@ -30,6 +30,7 @@ import CLIInput from "./CLIInput.vue";
 
 // JS func
 import * as Commands from "./Commands";
+import { complementDir } from "./DirHelper";
 
 export default {
   name: "CLI",
@@ -52,6 +53,16 @@ export default {
       histories: [
         // {input: "", dir: [], result_ary: []} ...
       ],
+      commands: [
+        { name: "cd",      args: "[dir]",       desc: "change directory." },
+        { name: "ls",      args: "[dir]",       desc: "list segments." },
+        { name: "cat",     args: "[file]",      desc: "show txt file content." },
+        { name: "history", args: "[-clear]",    desc: "command history." },
+        { name: "lang",    args: "[en|ja]",     desc: "change language." },
+        { name: "open",    args: "[link_file]", desc: "open link file." },
+        { name: "editor",  args: "[-close|-C]", desc: "open editor." },
+        { name: "share",   args: "[-tw]",       desc: "share sns." },
+      ],
 
       afterInputActions: []
     };
@@ -65,6 +76,7 @@ export default {
     },
 
     inputEnter(value) {
+      // CommandHelper.parse(value)
       const executed = this.execCommand(value);
       var result;
       if (executed[0] === null) {
@@ -84,11 +96,36 @@ export default {
         result_ary: result,
       });
 
+      // CommandHelper.callAfterActions
+
       // call after input action
       this.afterInputActions.forEach(callback => {
         callback(this);
       });
       this.afterInputActions = []
+    },
+
+    // TODO: 適当なコマンドの時だけ補完する
+    inputTab(input) {
+      console.log("tab key down");
+      const args = input.split(" ").filter((s) => s !== "");
+      if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
+      const result = complementDir(this.working_dir, args[1]);
+      if (result.dirs) {
+        // print dirs
+        let result_ary = this.textToHtml(result.dirs).split("\n");
+        result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
+        this.histories.push({
+          input: input,
+          dir: this.working_dir,
+          result_ary: result_ary,
+        });
+      } else if (result.dir) {
+        // complement current input
+
+      } else {
+        return null;
+      }
     },
 
     execCommand(input) {
@@ -99,19 +136,17 @@ export default {
         return [null, null];
       }
       switch (args[0]) {
-        case "help":
-          return [
-            `Command list
- * cd [dir]                 :change directory.
- * ls [dir]                 :list segments.
- * cat [file]               :show txt file content.
- * history [-clear]         :command history.
- * lang [en|ja]             :change language.
- * open [link_file]         :open link file.
- * editor [-close|-C]       :open editor.
- * share [-tw]              :share sns.
-
-and some secret commands ...`, null];
+        case "help": {
+          let max_len = 0;
+          this.commands.forEach(c => { max_len = Math.max(max_len, c.name.length + c.args.length)});
+          let str = "Command list\n";
+          this.commands.forEach(c => {
+            let len = c.name.length + c.args.length;
+            str += ` * ${c.name} ${c.args}${" ".repeat(max_len - len + 4)}:${c.desc}\n`
+          });
+          str += "\nand some secret commands ..."
+          return [str, null];
+        }
         case "cd": {
           let cd = Commands.cd(this.working_dir, args.splice(1));
           if (cd["error"] != undefined) {
