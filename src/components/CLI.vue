@@ -107,7 +107,6 @@ export default {
 
     // TODO: 適当なコマンドの時だけ補完する
     inputTab(input) {
-      console.log("tab key down");
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
       const result = complementDir(this.working_dir, args[1]);
@@ -121,8 +120,7 @@ export default {
           result_ary: result_ary,
         });
       } else if (result.dir) {
-        // complement current input
-
+        this.$refs.input.inputText = `${args[0]} ${result.dir}`;
       } else {
         return null;
       }
