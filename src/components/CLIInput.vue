@@ -1,5 +1,9 @@
 <template>
-  <span class="cli-input" @keydown.up="pressKeyUp" @keydown.down="pressKeyDown">
+  <span class="cli-input"
+   @keydown.up="pressKeyUp"
+   @keydown.down="pressKeyDown"
+   @keydown.tab="pressKeyTab"
+  >
     <input
       type="text"
       v-model="inputText"
@@ -60,6 +64,11 @@ export default {
       }
       this.inputText = "";
       this.inputCurrent = "";
+    },
+
+    pressKeyTab(e) {
+      e.preventDefault();
+      this.$emit("complement-dir", this.inputText);
     },
 
     pressKeyUp(e) {
