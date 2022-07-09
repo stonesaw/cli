@@ -3,35 +3,35 @@ const types = require('./types')
 
 function showDirContent(current_dir, target_dir = "./") {
   let target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
-  let result_ary = (target_dir[0] === "~" ? target_dir_ary : current_dir.concat(target_dir_ary));
+  let result_ary = (target_dir_ary[0] === "~" ? target_dir_ary : current_dir.concat(target_dir_ary));
   let current = directory;
   let hist = [];
-  let dirs = [];
+  let dir_name = [];
   for (let index = 0; index < result_ary.length; index++) {
     const element = result_ary[index];
     if (element === "..") { // ref parent dir
-      if (dirs.length <= 0) {
+      if (dir_name.length <= 0) {
         // hasn't parent
       } else {
         current = hist[hist.length - 1] || directory;
         hist.pop();
-        dirs.pop();
+        dir_name.pop();
       }
     } else if (current[element] == undefined) {
       return {
         error: "そのようなファイルやディレクトリはありません",
-        dirs: dirs,
+        dir_name: dir_name,
         files_list: current
       };
     } else {
       hist.push(current);
-      dirs.push(element);
+      dir_name.push(element);
       current = current[element];
     }
   }
 
-  if (dirs[0] !== "~") {
-    dirs.unshift("~");
+  if (dir_name[0] !== "~") {
+    dir_name.unshift("~");
     current = current["~"];
   }
 
@@ -39,13 +39,13 @@ function showDirContent(current_dir, target_dir = "./") {
   let type = (types.isObject(current) ? "dir" : current);
   if (type === "dir") {
     return {
-      dirs: dirs,
+      dir_name: dir_name,
       type: type,
       files_list: current
     };
   } else {
     return {
-      dirs: dirs,
+      dir_name: dir_name,
       type: current[0],
       content: current[1]
     };

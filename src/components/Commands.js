@@ -11,8 +11,8 @@ function cd(current_dir, options) {
   }
 
   return {
-    msg: `debug: cd (${current_dir.join("/")} -> ${target_dir.dirs.join("/")})`,
-    data: target_dir.dirs
+    msg: `debug: cd (${current_dir.join("/")} -> ${target_dir.dir_name.join("/")})`,
+    data: target_dir.dir_name
   };
 }
 
