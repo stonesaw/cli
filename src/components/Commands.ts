@@ -1,8 +1,8 @@
-const types = require('./types')
-import { isPresent } from './utils'
-import { showDirContent } from './DirHelper'
+import * as types from './Types';
+import { isPresent } from './Utils';
+import { showDirContent } from './DirHelper';
 
-function cd(current_dir, options) {
+function cd(current_dir: Array<string>, options: Array<string>) {
   const target_dir = showDirContent(current_dir, options[0] || "~");
   if (target_dir.error != undefined) {
     return { error: target_dir["error"] };
@@ -17,7 +17,7 @@ function cd(current_dir, options) {
 }
 
 
-function ls(current_dir, options) {
+function ls(current_dir: Array<string>, options: Array<string>) {
   const target_dir = showDirContent(current_dir, options[0]);
   if (target_dir.error != undefined) {
     return [target_dir.error, null];
@@ -25,7 +25,7 @@ function ls(current_dir, options) {
     return [`${options[0]}: ディレクトリではありません`, null];
   }
 
-  var str = "";
+  let str = "";
   for (const [key, value] of Object.entries(target_dir.files_list)) {
     if (types.isObject(value)) {
       str = str.concat(key, "/   "); // directory
@@ -38,7 +38,7 @@ function ls(current_dir, options) {
 }
 
 
-function cat(current_dir, options) {
+function cat(current_dir: Array<string>, options: Array<string>) {
   if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {
     return [`cat help`, null];
   }
@@ -53,31 +53,33 @@ function cat(current_dir, options) {
 }
 
 
-function history(options) {
+function history(options: Array<string>) {
   if (options.includes("-clear")) {
     localStorage.removeItem('history');
     return [`clear history`, null];
   }
 
-  var history = [];
+  let history = [];
   if (localStorage.getItem('history')) {
     try {
-      history = JSON.parse(localStorage.getItem('history'));
+      // eslint-disable-next-line
+      history = JSON.parse(localStorage.getItem('history') || "");
+      console.log(history);
     } catch (e) {
       localStorage.removeItem('history');
     }
   } else {
     return [`no history`, null];
   }
-  var len = Math.log10(history.length) + 1;
-  var str = "";
-  history.forEach((element, i) => {
+  const len = Math.log10(history.length) + 1;
+  let str = "";
+  history.forEach((element: any, i: number) => {
     str += ` ${i.toString().padStart(len, " ")}  ${element}\n`;
   });
   return [str.replace(/\n$/, ""), null];
 }
 
-function open(current_dir, options) {
+function open(current_dir: Array<string>, options: Array<string>) {
   if (!isPresent(options[0]) || options[0] === "-h" || options[0] === "--help") {
     return { msg: `open help` };
   }

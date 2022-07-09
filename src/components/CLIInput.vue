@@ -15,15 +15,24 @@
   </span>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+interface CLIInputData {
+  inputText: string,
+  history: Array<any>,
+  historyIndex: number | null,
+  inputCurrent: string
+}
+
+export default Vue.extend({
   data() {
     return {
       inputText: "",
       history: [],
       historyIndex: null,
       inputCurrent: "",
-    };
+    } as CLIInputData;
   },
 
   mounted() {
@@ -31,14 +40,18 @@ export default {
   },
 
   methods: {
+    refs(): any {
+      return this.$refs;
+    },
+
     focus() {
-      this.$refs.input.focus();
+      this.refs().input.focus();
     },
 
     loadHistory() {
       if (localStorage.getItem("history")) {
         try {
-          this.history = JSON.parse(localStorage.getItem("history"));
+          this.history = JSON.parse(localStorage.getItem("history") || "");
         } catch (e) {
           localStorage.removeItem("history");
         }
@@ -66,12 +79,12 @@ export default {
       this.inputCurrent = "";
     },
 
-    pressKeyTab(e) {
+    pressKeyTab(e: Event) {
       e.preventDefault();
       this.$emit("complement-dir", this.inputText);
     },
 
-    pressKeyUp(e) {
+    pressKeyUp(e: Event) {
       e.preventDefault(); // 上キーを押したときにカーソルが先頭に行くのを防ぐ
       if (this.history.length > 0) {
         if (this.historyIndex === null) {
@@ -83,7 +96,7 @@ export default {
       }
     },
 
-    pressKeyDown(e) {
+    pressKeyDown(e: Event) {
       e.preventDefault();
       if (this.history.length > 0 && this.historyIndex !== null) {
         if (this.historyIndex === this.history.length - 1) {
@@ -99,7 +112,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style scoped>
