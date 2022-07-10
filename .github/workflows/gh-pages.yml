@@ -1,7 +1,7 @@
 name: gh-pages
 on: [push, pull_request]
 jobs:
-  cd:
+  setup:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,6 +16,24 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Install dependencies
         run: yarn
+      - name: Run setup script
+        run: yarn run setup
+  lint:
+    runs-on: ${{ matrix.os }}
+    needs: setup
+    steps:
+      - name: Run lint (ESLint)
+        run: yarn run lint
+  test:
+    runs-on: ${{ matrix.os }}
+    needs: setup
+    steps:
+      - name: Run Test (Jest)
+        run: yarn run test
+  publish:
+    on: push
+    needs: [test, lint]
+    steps:
       - name: Generate
         run: yarn run build
       - name: Deploy
@@ -23,4 +41,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-
