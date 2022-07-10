@@ -2,14 +2,24 @@
   <div class="cli-main">
     <CLIStart />
     <!-- history -->
-    <div class="cli-history" v-for="(hist, i) in histories" :key="i">
+    <div
+      v-for="(hist, i) in histories"
+      :key="i"
+      class="cli-history"
+    >
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ hist.dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
       <span class="cli-input-history">{{ hist.input }}</span>
-      <div v-for="(result, i) in hist.result_ary" :key="i">
+      <div
+        v-for="(result, j) in hist.result_ary"
+        :key="j"
+      >
         <!-- (!) Be careful with XSS -->
-        <span class="cli-result" v-html="result"></span>
+        <span
+          class="cli-result"
+          v-html="result"
+        />
       </div>
     </div>
     <!-- input -->
@@ -17,7 +27,11 @@
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ working_dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
-      <CLIInput @exec-cmd="inputEnter" @complement-dir="inputTab" ref="input" />
+      <CLIInput
+        ref="input"
+        @exec-cmd="inputEnter"
+        @complement-dir="inputTab"
+      />
     </div>
     <!--  -->
   </div>

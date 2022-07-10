@@ -1,17 +1,18 @@
 <template>
-  <span class="cli-input"
-   @keydown.up="pressKeyUp"
-   @keydown.down="pressKeyDown"
-   @keydown.tab="pressKeyTab"
+  <span
+    class="cli-input"
+    @keydown.up="pressKeyUp"
+    @keydown.down="pressKeyDown"
+    @keydown.tab="pressKeyTab"
   >
     <input
-      type="text"
+      ref="input"
       v-model="inputText"
+      type="text"
       autofocus
       maxlength="50"
       @keydown.enter="pressKeyEnter"
-      ref="input"
-    />
+    >
   </span>
 </template>
 
@@ -19,6 +20,8 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  emits: ["exec-cmd", "complement-dir"],
+
   data() {
     return {
       inputText: "",

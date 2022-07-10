@@ -9,10 +9,10 @@
       language="javascript"
     /> -->
     <CLI
+      ref="cli"
       :class="{ 'editor-mode': editor_mode }"
       :editor_mode="editor_mode"
       @editor-mode="editor_mode = $event"
-      ref="cli"
     />
   </div>
 </template>
