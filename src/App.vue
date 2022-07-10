@@ -1,35 +1,34 @@
 <template>
   <div id="app">
-    <CLI ref="cli" />
+    <CLI ref="cliRef" />
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
 import CLI from './components/CLI.vue'
 
 export default defineComponent({
-  name: 'App',
   components: {
     CLI
   },
 
-  mounted() {
-    document.addEventListener('keydown', this.onKeyDown)
-  },
+  setup() {
+    const cliRef = ref<HTMLImageElement>();
+    addEventListener('keydown', onKeyDown)
 
-  beforeUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown)
-  },
+    // onUnmounted({
+    //   removeEventListener('keydown', onKeyDown)
+    // })
 
-  methods: {
-    onKeyDown() {
-      this.$refs.cli.focus();
+    function onKeyDown() {
+      cliRef.value?.focus();
       let element = document.documentElement;
       let bottom = element.scrollHeight - element.clientHeight;
       window.scroll(0, bottom);
-    },
+    }
+
+    return { cliRef }
   }
 });
 </script>

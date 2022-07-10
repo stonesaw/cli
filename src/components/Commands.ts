@@ -25,7 +25,7 @@ function ls(current_dir, options) {
     return [`${options[0]}: ディレクトリではありません`, null];
   }
 
-  var str = "";
+  let str = "";
   for (const [key, value] of Object.entries(target_dir.files_list)) {
     if (types.isObject(value)) {
       str = str.concat(key, "/   "); // directory
@@ -59,7 +59,7 @@ function history(options) {
     return [`clear history`, null];
   }
 
-  var history = [];
+  let history = [];
   if (localStorage.getItem('history')) {
     try {
       history = JSON.parse(localStorage.getItem('history'));
@@ -69,8 +69,8 @@ function history(options) {
   } else {
     return [`no history`, null];
   }
-  var len = Math.log10(history.length) + 1;
-  var str = "";
+  const len = Math.log10(history.length) + 1;
+  let str = "";
   history.forEach((element, i) => {
     str += ` ${i.toString().padStart(len, " ")}  ${element}\n`;
   });
