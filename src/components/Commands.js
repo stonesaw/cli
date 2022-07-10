@@ -1,5 +1,5 @@
-const types = require('./types')
-import { isPresent } from './utils'
+import * as types from './Types'
+import { isPresent } from './Utils'
 import { showDirContent } from './DirHelper'
 
 function cd(current_dir, options) {

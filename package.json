@@ -5,8 +5,9 @@
   "scripts": {
     "serve": "npm run build:dir && vue-cli-service serve",
     "build": "npm run build:dir && vue-cli-service build",
-    "build:dir": "node src/build-directory",
-    "lint": "vue-cli-service lint"
+    "build:dir": "node script/build-directory",
+    "lint": "vue-cli-service lint",
+    "clear": "rm -rf node_modules"
   },
   "dependencies": {
     "core-js": "^3.6.5",
