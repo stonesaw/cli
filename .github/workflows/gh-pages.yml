@@ -19,19 +19,19 @@ jobs:
       - name: Run setup script
         run: yarn run setup
   lint:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: Run lint (ESLint)
         run: yarn run lint
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: Run Test (Jest)
         run: yarn run test
   publish:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: [test, lint]
     steps:
       - name: Generate
