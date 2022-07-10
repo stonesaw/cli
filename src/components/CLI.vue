@@ -2,14 +2,24 @@
   <div class="cli-main">
     <CLIStart />
     <!-- history -->
-    <div class="cli-history" v-for="(hist, i) in histories" :key="i">
+    <div
+      v-for="(hist, i) in histories"
+      :key="i"
+      class="cli-history"
+    >
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ hist.dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
       <span class="cli-input-history">{{ hist.input }}</span>
-      <div v-for="(result, i) in hist.result_ary" :key="i">
+      <div
+        v-for="(result, j) in hist.result_ary"
+        :key="j"
+      >
         <!-- (!) Be careful with XSS -->
-        <span class="cli-result" v-html="result"></span>
+        <span
+          class="cli-result"
+          v-html="result"
+        />
       </div>
     </div>
     <!-- input -->
@@ -17,13 +27,19 @@
       <span class="cli-head">stonesaw.github.io </span>
       <span class="cli-dir">{{ working_dir.join("/") }}</span>
       <span class="cli-head"> $ </span>
-      <CLIInput @exec-cmd="inputEnter" @complement-dir="inputTab" ref="input" />
+      <CLIInput
+        ref="input"
+        @exec-cmd="inputEnter"
+        @complement-dir="inputTab"
+      />
     </div>
     <!--  -->
   </div>
 </template>
 
 <script>
+import { defineComponent } from 'vue';
+
 // Vue Component
 import CLIStart from "./CLIStart.vue";
 import CLIInput from "./CLIInput.vue";
@@ -32,18 +48,11 @@ import CLIInput from "./CLIInput.vue";
 import * as Commands from "./Commands";
 import { complementDir } from "./DirHelper";
 
-export default {
+export default defineComponent({
   name: "CLI",
   components: {
     CLIStart,
     CLIInput,
-  },
-
-  props: {
-    editor_mode: {
-      type: Boolean,
-      default: false
-    }
   },
 
   data() {
@@ -70,9 +79,7 @@ export default {
 
   methods: {
     focus() {
-      if (!this.editor_mode) {
-        this.$refs.input.focus();
-      }
+      this.$refs.input.focus();
     },
 
     inputEnter(value) {
@@ -184,13 +191,7 @@ export default {
           }
         }
         case "editor": {
-          if (args[1] === "-close" || args[1] === "-C") {
-            // returned msg
-            return [this.closeEditor(), null];
-          } else {
-            // returned msg
-            return [this.openEditor(), null];
-          }
+          return ["sorry... editor command was deleted.", null];
         }
         case "share": {
           if (args[1] === "-tw") {
@@ -209,24 +210,6 @@ export default {
       }
     },
 
-    openEditor() {
-      if (this.editor_mode === false) {
-        this.$emit("editor-mode", true);
-        return "";
-      } else {
-        return "editor is already open.";
-      }
-    },
-
-    closeEditor() {
-      if (this.editor_mode === true) {
-        this.$emit("editor-mode", false);
-        return "";
-      } else {
-        return "editor is not open.";
-      }
-    },
-
     textToHtml(str) {
       return str.replaceAll("&", "&amp;")
                 .replaceAll("<", "&lt;")
@@ -234,7 +217,7 @@ export default {
                 .replaceAll(" ", "&nbsp;");
     },
   },
-};
+});
 </script>
 
 <style scoped>
