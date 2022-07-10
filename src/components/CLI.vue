@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
+
 // Vue Component
 import CLIStart from "./CLIStart.vue";
 import CLIInput from "./CLIInput.vue";
@@ -32,7 +34,7 @@ import CLIInput from "./CLIInput.vue";
 import * as Commands from "./Commands";
 import { complementDir } from "./DirHelper";
 
-export default {
+export default defineComponent({
   name: "CLI",
   components: {
     CLIStart,
@@ -234,7 +236,7 @@ export default {
                 .replaceAll(" ", "&nbsp;");
     },
   },
-};
+});
 </script>
 
 <style scoped>

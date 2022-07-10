@@ -16,7 +16,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   data() {
     return {
       inputText: "",
@@ -99,7 +101,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style scoped>

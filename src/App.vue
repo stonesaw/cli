@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <MonacoEditor
+    <!-- <MonacoEditor
       v-if="editor_mode"
       v-model="code"
       ref="editor"
       class="editor"
       theme="vs-dark"
       language="javascript"
-    />
+    /> -->
     <CLI
       :class="{ 'editor-mode': editor_mode }"
       :editor_mode="editor_mode"
@@ -18,14 +18,16 @@
 </template>
 
 <script>
-import MonacoEditor from 'vue-monaco'
+import { defineComponent } from 'vue';
+
+// import MonacoEditor from 'vue-monaco'
 import CLI from './components/CLI.vue'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     CLI,
-    MonacoEditor
+    // MonacoEditor
   },
 
   data() {
@@ -39,7 +41,7 @@ export default {
     document.addEventListener('keydown', this.onKeyDown)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keydown', this.onKeyDown)
   },
 
@@ -60,7 +62,7 @@ export default {
       // }
     },
   }
-}
+});
 </script>
 
 <style>
