@@ -1,22 +1,16 @@
 const fs = require("fs");
 const path = require('path');
 
-const template = require('../src/assets/directory_template.json');
-
-function isType(type, obj) {
-  const toString = Object.prototype.toString.call(obj).slice(8, -1);
-  return obj !== undefined && obj !== null && toString === type;
-}
-
-function isObject(obj) { return isType("Object", obj); }
+const types = require('./components/types')
+const template = require('./assets/directory_template.json');
 
 function loadDirectory(template, head = []) {
-  const keys = Object.keys(template);
-  if (!isObject(template)) {
+  let keys = Object.keys(template);
+  if (!types.isObject(template)) {
     if (template[0] === "txt") { // load content
-      const path_ary = [...head];
+      let path_ary = [...head];
       path_ary.shift(); // delete "~"
-      const file_path = path.join(__dirname, "../src/assets/directory/", path_ary.join("/"));
+      const file_path = path.join(__dirname, "./assets/directory/", path_ary.join("/"));
       const buff = fs.readFileSync(file_path, "utf8");
       template[1] = buff;
     }
@@ -24,7 +18,7 @@ function loadDirectory(template, head = []) {
   }
   for (let i = 0; i < keys.length; i++) {
     const element = keys[i];
-    const _head = [...head];
+    let _head = [...head];
     _head.push(element);
     loadDirectory(template[element], _head);
   }
@@ -34,7 +28,7 @@ function loadDirectory(template, head = []) {
 
 const directory = loadDirectory(template);
 const result = JSON.stringify(directory, null, 2);
-fs.writeFileSync(path.join(__dirname, "../src/assets/directory.json"), result);
+fs.writeFileSync(path.join(__dirname, "./assets/directory.json"), result);
 
 
 // TODO: auto compile directory.json with webpack

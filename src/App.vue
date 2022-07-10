@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <!-- <MonacoEditor
+    <MonacoEditor
       v-if="editor_mode"
       v-model="code"
       ref="editor"
       class="editor"
       theme="vs-dark"
       language="javascript"
-    /> -->
+    />
     <CLI
       :class="{ 'editor-mode': editor_mode }"
       :editor_mode="editor_mode"
@@ -17,16 +17,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-// import MonacoEditor from 'vue-monaco';
-import CLI from './components/CLI.vue';
+<script>
+import MonacoEditor from 'vue-monaco'
+import CLI from './components/CLI.vue'
 
-export default Vue.extend({
+export default {
   name: 'App',
   components: {
-    CLI
-    // MonacoEditor
+    CLI,
+    MonacoEditor
   },
 
   data() {
@@ -45,12 +44,8 @@ export default Vue.extend({
   },
 
   methods: {
-    refs(): any {
-      return this.$refs;
-    },
-
     onKeyDown() {
-      this.refs().cli.focus();
+      this.$refs.cli.focus();
       // TODO: scroll when editor_mode && focused cli-input
       let element = document.documentElement;
       let bottom = element.scrollHeight - element.clientHeight;
@@ -65,7 +60,7 @@ export default Vue.extend({
       // }
     },
   }
-});
+}
 </script>
 
 <style>

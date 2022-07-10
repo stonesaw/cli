@@ -1,4 +1,4 @@
-function isPresent(obj: any): boolean {
+function isPresent(obj) {
   return (obj != null && obj != undefined && obj !== [] && obj !== {})
 }
 

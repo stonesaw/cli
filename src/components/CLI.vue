@@ -23,8 +23,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
+<script>
+// Vue Component
 import CLIStart from "./CLIStart.vue";
 import CLIInput from "./CLIInput.vue";
 
@@ -32,15 +32,7 @@ import CLIInput from "./CLIInput.vue";
 import * as Commands from "./Commands";
 import { complementDir } from "./DirHelper";
 
-interface CLIData {
-  inputText: string,
-  working_dir: Array<string>,
-  histories: Array<any>,
-  commands: Array<any>,
-  afterInputActions: Array<any>
-}
-
-export default Vue.extend({
+export default {
   name: "CLI",
   components: {
     CLIStart,
@@ -73,21 +65,17 @@ export default Vue.extend({
       ],
 
       afterInputActions: []
-    } as CLIData
+    };
   },
 
   methods: {
-    refs(): any {
-      return this.$refs;
-    },
-
     focus() {
       if (!this.editor_mode) {
-        this.refs().input.focus();
+        this.$refs.input.focus();
       }
     },
 
-    inputEnter(value: string) {
+    inputEnter(value) {
       // CommandHelper.parse(value)
       const executed = this.execCommand(value);
       var result;
@@ -100,7 +88,7 @@ export default Vue.extend({
       } else {
         // print plane text
         result = this.textToHtml(executed[0]).split("\n");
-        result = result.map((x: string) => x === "" ? "&nbsp;" : x);
+        result = result.map(x => x === "" ? "&nbsp;" : x);
       }
       this.histories.push({
         input: value,
@@ -118,27 +106,27 @@ export default Vue.extend({
     },
 
     // TODO: 適当なコマンドの時だけ補完する
-    inputTab(input: string) {
+    inputTab(input) {
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
-      const result: any = complementDir(this.working_dir, args[1]);
+      const result = complementDir(this.working_dir, args[1]);
       if (result.dirs) {
         // print dirs
         let result_ary = this.textToHtml(result.dirs).split("\n");
-        result_ary = result_ary.map((x: string) => x === "" ? "&nbsp;" : x);
+        result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
         this.histories.push({
           input: input,
           dir: this.working_dir,
           result_ary: result_ary,
         });
       } else if (result.dir) {
-        this.refs().input.inputText = `${args[0]} ${result.dir}`;
+        this.$refs.input.inputText = `${args[0]} ${result.dir}`;
       } else {
         return null;
       }
     },
 
-    execCommand(input: string) {
+    execCommand(input) {
       // return [str, flag]
       // flag: null or "html"
       const args = input.split(" ").filter((s) => s !== "");
@@ -162,7 +150,7 @@ export default Vue.extend({
           if (cd["error"] != undefined) {
             return [cd["error"], null];
           } else {
-            this.afterInputActions.push(function (component: any) {
+            this.afterInputActions.push(function (component) {
               component.working_dir = cd.data;
             })
             return [null, null];
@@ -176,7 +164,7 @@ export default Vue.extend({
         }
         case "history": {
           if (args[1] === "-clear") {
-            this.refs().input.clearHistory();
+            this.$refs.input.clearHistory();
           }
           return Commands.history(args.splice(1));
         }
@@ -239,14 +227,14 @@ export default Vue.extend({
       }
     },
 
-    textToHtml(str: string) {
+    textToHtml(str) {
       return str.replaceAll("&", "&amp;")
                 .replaceAll("<", "&lt;")
                 .replaceAll(">", "&gt;")
                 .replaceAll(" ", "&nbsp;");
     },
   },
-});
+};
 </script>
 
 <style scoped>
