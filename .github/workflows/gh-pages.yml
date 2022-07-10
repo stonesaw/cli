@@ -18,23 +18,11 @@ jobs:
         run: yarn
       - name: Run setup script
         run: yarn run setup
-  lint:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - name: Run lint (ESLint)
+      - name: Lint
         run: yarn run lint
-  test:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - name: Run Test (Jest)
+      - name: Test
         run: yarn run test
-  publish:
-    runs-on: ubuntu-latest
-    needs: [test, lint]
-    steps:
-      - name: Generate
+      - name: Publish
         run: yarn run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
