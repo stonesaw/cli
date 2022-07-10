@@ -31,7 +31,7 @@ jobs:
       - name: Run Test (Jest)
         run: yarn run test
   publish:
-    on: push
+    runs-on: ${{ matrix.os }}
     needs: [test, lint]
     steps:
       - name: Generate
