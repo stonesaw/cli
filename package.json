@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "npm run build:dir && vue-cli-service serve",
     "build": "npm run build:dir && vue-cli-service build",
-    "build:dir": "node src/build-directory",
+    "build:dir": "node script/build-directory",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
