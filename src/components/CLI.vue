@@ -55,13 +55,6 @@ export default defineComponent({
     CLIInput,
   },
 
-  props: {
-    editor_mode: {
-      type: Boolean,
-      default: false
-    }
-  },
-
   data() {
     return {
       inputText: "", // emitted: CLIInput
@@ -86,9 +79,7 @@ export default defineComponent({
 
   methods: {
     focus() {
-      if (!this.editor_mode) {
-        this.$refs.input.focus();
-      }
+      this.$refs.input.focus();
     },
 
     inputEnter(value) {
@@ -200,13 +191,7 @@ export default defineComponent({
           }
         }
         case "editor": {
-          if (args[1] === "-close" || args[1] === "-C") {
-            // returned msg
-            return [this.closeEditor(), null];
-          } else {
-            // returned msg
-            return [this.openEditor(), null];
-          }
+          return ["sorry... editor command was deleted.", null];
         }
         case "share": {
           if (args[1] === "-tw") {
@@ -222,24 +207,6 @@ export default defineComponent({
             null
           ];
         }
-      }
-    },
-
-    openEditor() {
-      if (this.editor_mode === false) {
-        this.$emit("editor-mode", true);
-        return "";
-      } else {
-        return "editor is already open.";
-      }
-    },
-
-    closeEditor() {
-      if (this.editor_mode === true) {
-        this.$emit("editor-mode", false);
-        return "";
-      } else {
-        return "editor is not open.";
       }
     },
 

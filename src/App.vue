@@ -1,40 +1,18 @@
 <template>
   <div id="app">
-    <!-- <MonacoEditor
-      v-if="editor_mode"
-      v-model="code"
-      ref="editor"
-      class="editor"
-      theme="vs-dark"
-      language="javascript"
-    /> -->
-    <CLI
-      ref="cli"
-      :class="{ 'editor-mode': editor_mode }"
-      :editor_mode="editor_mode"
-      @editor-mode="editor_mode = $event"
-    />
+    <CLI ref="cli" />
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 
-// import MonacoEditor from 'vue-monaco'
 import CLI from './components/CLI.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    CLI,
-    // MonacoEditor
-  },
-
-  data() {
-    return {
-      editor_mode: false,
-      code: "// your code here ...\n\nconst msg = 'hello, world!';\nconsole.log(msg);"
-    }
+    CLI
   },
 
   mounted() {
@@ -48,18 +26,9 @@ export default defineComponent({
   methods: {
     onKeyDown() {
       this.$refs.cli.focus();
-      // TODO: scroll when editor_mode && focused cli-input
       let element = document.documentElement;
       let bottom = element.scrollHeight - element.clientHeight;
       window.scroll(0, bottom);
-
-      // switch (event.key) {
-      //   case "Enter":
-      //     break;
-      //   default:
-      //     // any
-      //     break;
-      // }
     },
   }
 });
@@ -122,16 +91,5 @@ a {
   -moz-osx-font-smoothing: grayscale;
   color: var(--color-font-main);
   font-family: 'Roboto Mono', monospace;
-}
-
-.editor-mode {
-  overflow: scroll;
-  height: calc(30vh - 20px);
-  border-top: .5px solid gray;
-}
-
-.editor {
-  width: 100%;
-  height: 70vh;
 }
 </style>
