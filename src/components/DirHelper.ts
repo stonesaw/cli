@@ -1,7 +1,7 @@
-import directory from '../assets/directory.json'
+const directory = require('../assets/directory.json')
 import * as types from './Types'
 
-function showDirContent(current_dir, target_dir = "./") {
+function showDirContent(current_dir: Array<string>, target_dir: string = "./") {
   const target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
   const result_ary = (target_dir_ary[0] === "~" ? target_dir_ary : current_dir.concat(target_dir_ary));
   let current = directory;
@@ -53,7 +53,7 @@ function showDirContent(current_dir, target_dir = "./") {
 }
 
 // 最後に / がつくかつかないか
-function complementDir(current_dir, input_dir = "./") {
+function complementDir(current_dir: Array<string>, input_dir: string  = "./") {
   const target_dir = input_dir.split("/").filter(element => element !== "" && element !== ".");
   const result = showDirContent(current_dir, input_dir);
   if (result.type === "dir" || result.error) {
@@ -75,7 +75,7 @@ function complementDir(current_dir, input_dir = "./") {
       return { dir: dir }
     } else { // match some dirs
       let str = "";
-      const dir_with_type = [];
+      const dir_with_type: Array<Array<any>> = [];
       matched_dir.forEach(dir => dir_with_type.push([dir, result.files_list[dir]]));
       dir_with_type.forEach(dir => {
         if (types.isObject(dir[1])) {

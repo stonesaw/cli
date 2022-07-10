@@ -39,6 +39,7 @@
 </template>
 
 <script>
+// TODO: typescript 対応
 import { defineComponent } from 'vue';
 
 // Vue Component

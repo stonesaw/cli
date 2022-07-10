@@ -2,7 +2,7 @@ import * as types from './Types'
 import { isPresent } from './Utils'
 import { showDirContent } from './DirHelper'
 
-function cd(current_dir, options) {
+function cd(current_dir: Array<string>, options: Array<string>) {
   const target_dir = showDirContent(current_dir, options[0] || "~");
   if (target_dir.error != undefined) {
     return { error: target_dir["error"] };
@@ -17,7 +17,7 @@ function cd(current_dir, options) {
 }
 
 
-function ls(current_dir, options) {
+function ls(current_dir: Array<string>, options: Array<string>) {
   const target_dir = showDirContent(current_dir, options[0]);
   if (target_dir.error != undefined) {
     return [target_dir.error, null];
@@ -38,7 +38,7 @@ function ls(current_dir, options) {
 }
 
 
-function cat(current_dir, options) {
+function cat(current_dir: Array<string>, options: Array<string>) {
   if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {
     return [`cat help`, null];
   }
@@ -53,7 +53,7 @@ function cat(current_dir, options) {
 }
 
 
-function history(options) {
+function history(options: Array<string>) {
   if (options.includes("-clear")) {
     localStorage.removeItem('history');
     return [`clear history`, null];
@@ -62,7 +62,8 @@ function history(options) {
   let history = [];
   if (localStorage.getItem('history')) {
     try {
-      history = JSON.parse(localStorage.getItem('history'));
+      // TODO: What happens when cant get localStorage item
+      history = JSON.parse(localStorage.getItem('history') || "");
     } catch (e) {
       localStorage.removeItem('history');
     }
@@ -71,13 +72,13 @@ function history(options) {
   }
   const len = Math.log10(history.length) + 1;
   let str = "";
-  history.forEach((element, i) => {
+  history.forEach((element: any, i: number) => {
     str += ` ${i.toString().padStart(len, " ")}  ${element}\n`;
   });
   return [str.replace(/\n$/, ""), null];
 }
 
-function open(current_dir, options) {
+function open(current_dir: Array<string>, options: Array<string>) {
   if (!isPresent(options[0]) || options[0] === "-h" || options[0] === "--help") {
     return { msg: `open help` };
   }
