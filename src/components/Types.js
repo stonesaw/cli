@@ -18,7 +18,7 @@ function isFunction(obj) { return isType("Function", obj); }
 function isRegExp(obj)   { return isType("RegExp",   obj); }
 function isObject(obj)   { return isType("Object",   obj); }
 
-module.exports = {
+export {
   isType,
   type,
   isString,

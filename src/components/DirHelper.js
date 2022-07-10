@@ -1,5 +1,5 @@
-const directory = require('../assets/directory.json')
-const types = require('./types')
+import directory from '../assets/directory.json'
+import * as types from './Types'
 
 function showDirContent(current_dir, target_dir = "./") {
   let target_dir_ary = target_dir.split("/").filter(element => element !== "" && element !== ".");
