@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "npm run build:dir && vue-cli-service serve",
-    "build": "npm run build:dir && vue-cli-service build",
+    "serve": "npm run setup && vue-cli-service serve",
+    "build": "npm run setup && vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build:dir": "node script/build-directory",
+    "test": "vue-cli-service test:unit",
+    "setup": "node script/build-directory",
     "clear": "rm -rf node_modules"
   },
   "dependencies": {
