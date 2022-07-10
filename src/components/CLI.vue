@@ -16,6 +16,7 @@
         :key="j"
       >
         <!-- (!) Be careful with XSS -->
+        <!-- eslint-disable vue/no-v-html -->
         <span
           class="cli-result"
           v-html="result"
