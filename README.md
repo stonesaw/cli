@@ -17,7 +17,6 @@ stonesaaw.github.io> ls
 
 
 
-  
 ## Project setup
 ```
 npm install
