@@ -16,9 +16,15 @@
   </span>
 </template>
 
-<script>
-// TODO: typescript 対応
+<script lang="ts">
 import { defineComponent } from 'vue';
+
+interface CLIInputData {
+  inputText: string,
+  history: Array<string>,
+  historyIndex: number | null,
+  inputCurrent: string
+}
 
 export default defineComponent({
   emits: ["exec-cmd", "complement-dir"],
@@ -29,7 +35,7 @@ export default defineComponent({
       history: [],
       historyIndex: null,
       inputCurrent: "",
-    };
+    } as CLIInputData;
   },
 
   mounted() {
@@ -37,14 +43,18 @@ export default defineComponent({
   },
 
   methods: {
+    refs(): any {
+      this.$refs
+    },
+
     focus() {
-      this.$refs.input.focus();
+      this.refs().input.focus();
     },
 
     loadHistory() {
       if (localStorage.getItem("history")) {
         try {
-          this.history = JSON.parse(localStorage.getItem("history"));
+          this.history = JSON.parse(localStorage.getItem("history") || ""); // TODO
         } catch (e) {
           localStorage.removeItem("history");
         }
@@ -72,12 +82,12 @@ export default defineComponent({
       this.inputCurrent = "";
     },
 
-    pressKeyTab(e) {
+    pressKeyTab(e: Event) {
       e.preventDefault();
       this.$emit("complement-dir", this.inputText);
     },
 
-    pressKeyUp(e) {
+    pressKeyUp(e: Event) {
       e.preventDefault(); // 上キーを押したときにカーソルが先頭に行くのを防ぐ
       if (this.history.length > 0) {
         if (this.historyIndex === null) {
@@ -89,7 +99,7 @@ export default defineComponent({
       }
     },
 
-    pressKeyDown(e) {
+    pressKeyDown(e: Event) {
       e.preventDefault();
       if (this.history.length > 0 && this.historyIndex !== null) {
         if (this.historyIndex === this.history.length - 1) {

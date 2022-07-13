@@ -38,17 +38,21 @@
   </div>
 </template>
 
-<script>
-// TODO: typescript 対応
+<script lang="ts">
 import { defineComponent } from 'vue';
-
-// Vue Component
 import CLIStart from "./CLIStart.vue";
 import CLIInput from "./CLIInput.vue";
 
-// JS func
 import * as Commands from "./Commands";
 import { complementDir } from "./DirHelper";
+
+interface CLIData {
+  inputText: string,
+  working_dir: Array<string>,
+  histories: Array<any>,
+  commands: Array<any>,
+  afterInputActions: Array<any>
+}
 
 export default defineComponent({
   name: "CLI",
@@ -71,20 +75,23 @@ export default defineComponent({
         { name: "history", args: "[-clear]",    desc: "command history." },
         { name: "lang",    args: "[en|ja]",     desc: "change language." },
         { name: "open",    args: "[link_file]", desc: "open link file." },
-        { name: "editor",  args: "[-close|-C]", desc: "open editor." },
         { name: "share",   args: "[-tw]",       desc: "share sns." },
       ],
 
       afterInputActions: []
-    };
+    } as CLIData;
   },
 
   methods: {
-    focus() {
-      this.$refs.input.focus();
+    refs(): any {
+      this.$refs
     },
 
-    inputEnter(value) {
+    focus() {
+      this.refs().input.focus();
+    },
+
+    inputEnter(value: string) {
       // CommandHelper.parse(value)
       const executed = this.execCommand(value);
       var result;
@@ -97,7 +104,7 @@ export default defineComponent({
       } else {
         // print plane text
         result = this.textToHtml(executed[0]).split("\n");
-        result = result.map(x => x === "" ? "&nbsp;" : x);
+        result = result.map((x: string) => x === "" ? "&nbsp;" : x);
       }
       this.histories.push({
         input: value,
@@ -115,11 +122,11 @@ export default defineComponent({
     },
 
     // TODO: 適当なコマンドの時だけ補完する
-    inputTab(input) {
+    inputTab(input: string) {
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
       const result = complementDir(this.working_dir, args[1]);
-      if (result.dirs) {
+      if (result?.dirs) {
         // print dirs
         let result_ary = this.textToHtml(result.dirs).split("\n");
         result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
@@ -128,14 +135,14 @@ export default defineComponent({
           dir: this.working_dir,
           result_ary: result_ary,
         });
-      } else if (result.dir) {
-        this.$refs.input.inputText = `${args[0]} ${result.dir}`;
+      } else if (result?.dir) {
+        this.refs().input.inputText = `${args[0]} ${result.dir}`;
       } else {
         return null;
       }
     },
 
-    execCommand(input) {
+    execCommand(input: string) {
       // return [str, flag]
       // flag: null or "html"
       const args = input.split(" ").filter((s) => s !== "");
@@ -159,7 +166,7 @@ export default defineComponent({
           if (cd["error"] != undefined) {
             return [cd["error"], null];
           } else {
-            this.afterInputActions.push(function (component) {
+            this.afterInputActions.push(function (component: any) {
               component.working_dir = cd.data;
             })
             return [null, null];
@@ -173,7 +180,7 @@ export default defineComponent({
         }
         case "history": {
           if (args[1] === "-clear") {
-            this.$refs.input.clearHistory();
+            this.refs().input.clearHistory();
           }
           return Commands.history(args.splice(1));
         }
@@ -212,7 +219,7 @@ export default defineComponent({
       }
     },
 
-    textToHtml(str) {
+    textToHtml(str: string) {
       return str.replaceAll("&", "&amp;")
                 .replaceAll("<", "&lt;")
                 .replaceAll(">", "&gt;")

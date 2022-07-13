@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <CLI ref="cliRef" />
+    <CLI ref="cli" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import CLI from './components/CLI.vue'
 
 export default defineComponent({
@@ -13,22 +13,25 @@ export default defineComponent({
     CLI
   },
 
-  setup() {
-    const cliRef = ref<HTMLImageElement>();
-    addEventListener('keydown', onKeyDown)
+  mounted() {
+    document.addEventListener('keydown', this.onKeyDown)
+  },
 
-    // onUnmounted({
-    //   removeEventListener('keydown', onKeyDown)
-    // })
+  onUnmounted() {
+    document.removeEventListener('keydown', this.onKeyDown)
+  },
 
-    function onKeyDown() {
-      cliRef.value?.focus();
+  methods: {
+    refs(): any {
+      return this.$refs;
+    },
+
+    onKeyDown() {
+      this.refs().cli.focus();
       let element = document.documentElement;
       let bottom = element.scrollHeight - element.clientHeight;
       window.scroll(0, bottom);
-    }
-
-    return { cliRef }
+    },
   }
 });
 </script>
