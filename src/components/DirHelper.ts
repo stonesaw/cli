@@ -89,18 +89,11 @@ function printChildDir(dir_list: (Dir | DirFile)[]):string {
 }
 
 function findAll(parentDir: Dir, pattern: RegExp = /.*/):(Dir | DirFile)[] {
-  // TODO filter
-  const ary: (Dir | DirFile)[] = [];
-  for (let i = 0; i < parentDir.childDir.length; i++) {
-    const child = parentDir.childDir[i];
-    if (pattern.test(child.name)) {
-      ary.push(child);
-    };
-  }
-  return ary;
+  return parentDir.childDir.filter(child => pattern.test(child.name));
 }
 
 function joinDir(dir_ary: string[], dir_name: string): string[] {
+  // TODO
   return [""];
 }
 

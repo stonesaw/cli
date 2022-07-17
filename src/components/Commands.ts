@@ -48,8 +48,7 @@ function history(options: string[]): [string, "html" | null] {
   let history = [];
   if (localStorage.getItem('history')) {
     try {
-      // TODO: What happens when cant get localStorage item
-      history = JSON.parse(localStorage.getItem('history') || "");
+      history = JSON.parse(localStorage.getItem('history')!);
     } catch (e) {
       localStorage.removeItem('history');
     }

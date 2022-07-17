@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent } from 'vue';
 import CLIStart from "./CLIStart.vue";
 import CLIInput from "./CLIInput.vue";
 
@@ -59,19 +59,6 @@ export default defineComponent({
   components: {
     CLIStart,
     CLIInput,
-  },
-
-  setup() {
-    const input = ref(null)
-
-    onMounted(() => {
-      // DOM 要素は初回レンダリングの後に ref に代入されます
-      console.log(input.value) // <div>This is a root element</div>
-    })
-
-    return {
-      input
-    }
   },
 
   data() {
@@ -96,13 +83,12 @@ export default defineComponent({
   },
 
   methods: {
-    // TODO
     refs(): any {
-      return this.$refs
+      return this.$refs;
     },
 
     focus() {
-      this.refs().focus();
+      this.refs().input.focus();
     },
 
     inputEnter(value: string) {
@@ -135,7 +121,6 @@ export default defineComponent({
       this.afterInputActions = []
     },
 
-    // TODO: 適当なコマンドの時だけ補完する
     inputTab(input: string) {
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
