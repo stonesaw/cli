@@ -84,7 +84,7 @@ export default defineComponent({
 
   methods: {
     refs(): any {
-      this.$refs
+      return this.$refs;
     },
 
     focus() {
@@ -121,14 +121,13 @@ export default defineComponent({
       this.afterInputActions = []
     },
 
-    // TODO: 適当なコマンドの時だけ補完する
     inputTab(input: string) {
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
       const result = complementDir(this.working_dir, args[1]);
-      if (result?.dirs) {
+      if (typeof result === "string") {
         // print dirs
-        let result_ary = this.textToHtml(result.dirs).split("\n");
+        let result_ary = this.textToHtml(result).split("\n");
         result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
         this.histories.push({
           input: input,
@@ -142,7 +141,7 @@ export default defineComponent({
       }
     },
 
-    execCommand(input: string) {
+    execCommand(input: string): [string | null, "html" | null] {
       // return [str, flag]
       // flag: null or "html"
       const args = input.split(" ").filter((s) => s !== "");
@@ -152,8 +151,8 @@ export default defineComponent({
       switch (args[0]) {
         case "help": {
           let max_len = 0;
-          this.commands.forEach(c => { max_len = Math.max(max_len, c.name.length + c.args.length)});
           let str = "Command list\n";
+          this.commands.forEach(c => { max_len = Math.max(max_len, c.name.length + c.args.length)});
           this.commands.forEach(c => {
             let len = c.name.length + c.args.length;
             str += ` * ${c.name} ${c.args}${" ".repeat(max_len - len + 4)}:${c.desc}\n`

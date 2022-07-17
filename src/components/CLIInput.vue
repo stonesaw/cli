@@ -44,7 +44,7 @@ export default defineComponent({
 
   methods: {
     refs(): any {
-      this.$refs
+      return this.$refs;
     },
 
     focus() {
@@ -54,7 +54,7 @@ export default defineComponent({
     loadHistory() {
       if (localStorage.getItem("history")) {
         try {
-          this.history = JSON.parse(localStorage.getItem("history") || ""); // TODO
+          this.history = JSON.parse(localStorage.getItem("history")!);
         } catch (e) {
           localStorage.removeItem("history");
         }

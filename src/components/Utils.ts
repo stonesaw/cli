@@ -1,6 +1,10 @@
-// TODO: fix obj !== [] && obj !== {}
 function isPresent(obj: any): boolean {
-  return (obj != null && obj != undefined && obj !== [] && obj !== {})
+  return ((obj !== null && obj !== undefined) ||
+          Array.isArray(obj) && isEmpty(obj))
+}
+
+function isEmpty(ary: any[]): boolean {
+  return !(ary.length > 0)
 }
 
 
