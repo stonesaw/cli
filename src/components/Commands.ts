@@ -1,51 +1,37 @@
-import * as types from './Types'
 import { isPresent } from './Utils'
-import { showDirContent } from './DirHelper'
+import { showDirContent, isDir, isDirFile, printChildDir } from './DirHelper'
 
-function cd(current_dir: Array<string>, options: Array<string>) {
+function cd(current_dir: string[], options: string[]) {
   const target_dir = showDirContent(current_dir, options[0] || "~");
-  if (target_dir.error != undefined) {
-    return { error: target_dir["error"] };
-  } else if (target_dir.type !== "dir") {
+  if (isDirFile(target_dir)) {
     return { error: `${options[0]}: ディレクトリではありません` };
-  }
-
-  return {
-    msg: `debug: cd (${current_dir.join("/")} -> ${target_dir.dir_name.join("/")})`,
-    data: target_dir.dir_name
+  } else if (!isDir(target_dir)) {
+    return { error: target_dir.error };
+  } else {
+    return { data: target_dir.name }
   };
 }
 
-
-function ls(current_dir: Array<string>, options: Array<string>) {
+function ls(current_dir: string[], options: string[]): [string, "html" | null] {
   const target_dir = showDirContent(current_dir, options[0]);
-  if (target_dir.error != undefined) {
+  if (isDirFile(target_dir)) {
+    return [`${options[0]}: ディレクトリではありません`, null ];
+  } else if (!isDir(target_dir)) {
     return [target_dir.error, null];
-  } else if (target_dir.type !== "dir") {
-    return [`${options[0]}: ディレクトリではありません`, null];
+  } else {
+    return [printChildDir(target_dir.childDir), null];
   }
-
-  let str = "";
-  for (const [key, value] of Object.entries(target_dir.files_list)) {
-    if (types.isObject(value)) {
-      str = str.concat(key, "/   "); // directory
-    } else {
-      str = str.concat(key, "    "); // file
-    }
-  }
-
-  return [str, null];
 }
 
 
-function cat(current_dir: Array<string>, options: Array<string>) {
+function cat(current_dir: string[], options: string[]): [string, "html" | null] {
   if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {
     return [`cat help`, null];
   }
   const target_dir = showDirContent(current_dir, options[0]);
-  if (target_dir.error != undefined) {
+  if (!isDir(target_dir) && !isDirFile(target_dir)) {
     return [target_dir.error, null];
-  } else if (target_dir.type !== "txt") {
+  } else if (isDir(target_dir) || target_dir.type !== "txt") {
     return [`${options[0]}: テキストファイルではありません`, null];
   } else {
     return [target_dir.content, null];
@@ -53,7 +39,7 @@ function cat(current_dir: Array<string>, options: Array<string>) {
 }
 
 
-function history(options: Array<string>) {
+function history(options: string[]): [string, "html" | null] {
   if (options.includes("-clear")) {
     localStorage.removeItem('history');
     return [`clear history`, null];
@@ -78,14 +64,14 @@ function history(options: Array<string>) {
   return [str.replace(/\n$/, ""), null];
 }
 
-function open(current_dir: Array<string>, options: Array<string>) {
+function open(current_dir: string[], options: string[]) {
   if (!isPresent(options[0]) || options[0] === "-h" || options[0] === "--help") {
     return { msg: `open help` };
   }
   const target_dir = showDirContent(current_dir, options[0]);
-  if (target_dir.error != undefined) {
+  if (!isDir(target_dir) && !isDirFile(target_dir)) {
     return { error: target_dir.error };
-  } else if (target_dir.type !== "link") {
+  } else if (isDir(target_dir) || target_dir.type !== "link") {
     return { error: `${options[0]}: リンクではありません` };
   } else {
     return { data: target_dir.content };
