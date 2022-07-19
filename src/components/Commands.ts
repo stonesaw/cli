@@ -1,14 +1,14 @@
 import { isPresent } from './Utils'
 import { showDirContent, isDir, isDirFile, printChildDir } from './DirHelper'
 
-function cd(current_dir: string[], options: string[]) {
+function cd(current_dir: string[], options: string[]): { dir?: string[], error?: string } {
   const target_dir = showDirContent(current_dir, options[0] || "~");
   if (isDirFile(target_dir)) {
     return { error: `${options[0]}: ディレクトリではありません` };
   } else if (!isDir(target_dir)) {
     return { error: target_dir.error };
   } else {
-    return { data: target_dir.name }
+    return { dir: target_dir.path.split("/") }
   };
 }
 
@@ -22,7 +22,6 @@ function ls(current_dir: string[], options: string[]): [string, "html" | null] {
     return [printChildDir(target_dir.childDir), null];
   }
 }
-
 
 function cat(current_dir: string[], options: string[]): [string, "html" | null] {
   if ((!isPresent(options[0])) || options[0] === "-h" || options[0] === "--help") {

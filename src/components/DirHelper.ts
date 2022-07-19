@@ -1,19 +1,13 @@
-interface JSONFile {
-  [key: string]: Array<string>
-}
-
-interface JSONDir {
-  [key: string]: JSONDir | JSONFile
-}
-
-const directory_json: JSONDir = require('../assets/directory.json')
+const directory_json = require('../assets/directory.json')
 import * as types from './Types'
+
+type FileTypes = "txt" | "link" | "img";
 
 type DirFile = {
   path: string;
   name: string;
   parentDir: Dir;
-  type: "txt" | "link" | "img";
+  type: FileTypes;
   content: string;
 };
 
@@ -24,12 +18,16 @@ type Dir = {
   childDir: (Dir | DirFile)[];
 };
 
-function isDir(arg: any): arg is Dir {
-  return arg.childDir !== undefined;
+function allowedFileType(obj: any): obj is FileTypes {
+  return (obj === "txt" || obj === "link" || obj === "img");
 }
 
-function isDirFile(arg: any): arg is DirFile {
-  return arg.content !== undefined;
+function isDir(obj: any): obj is Dir {
+  return obj.childDir !== undefined;
+}
+
+function isDirFile(obj: any): obj is DirFile {
+  return obj?.content !== undefined;
 }
 
 function isRoot(dir: Dir) {
@@ -44,10 +42,9 @@ function generateDir(json: any, parent: Dir) {
         path: `${parent.path}/${key}`,
         name: key,
         type: value[0],
-        content: value[1],
+        content: value[1] || "",
         parentDir: parent
-      }
-      // console.log(file);
+      };
       parent.childDir.push(file);
     } else if (types.isObject(value)) { // directory
       // eslint-disable-next-line prefer-const
@@ -56,9 +53,8 @@ function generateDir(json: any, parent: Dir) {
         name: key,
         childDir: [],
         parentDir: parent
-      }
+      };
       parent.childDir.push(dir);
-      // console.log(dir);
       generateDir(json[`${key}`], dir);
     } else {
       throw `can't generate directory ( key:${key}, value:${value} )`;
@@ -80,9 +76,9 @@ function printChildDir(dir_list: (Dir | DirFile)[]):string {
   for (let i = 0; i < dir_list.length; i++) {
     const child = dir_list[i];
     if (isDir(child)) {
-      str += `${child}/   `;
+      str += `${child.name}/   `;
     } else {
-      str += `${child}    `;
+      str += `${child.name}    `;
     }
   }
   return str;
@@ -105,7 +101,8 @@ function getFullPath(current_dir: string[], target_dir: string): string[] {
 
 function showDirContent(current_dir: string[], target_dir: string = "./"): Dir | DirFile | { error: string, info: Dir | DirFile } {
   const path_list = getFullPath(current_dir, target_dir);
-  let current: Dir | DirFile = JSON.parse(JSON.stringify(directory)); // deep copy
+  if (path_list[0] === "~") { path_list.shift(); }
+  let current: Dir | DirFile = directory; // TODO: deep copy
   for (let i = 0; i < path_list.length; i++) {
     const path_name = path_list[i];
     if (isDirFile(current)) { // error: like a 'file_name/dir_name/'
@@ -120,16 +117,20 @@ function showDirContent(current_dir: string[], target_dir: string = "./"): Dir |
         current = current.parentDir;
       }
     } else {
+      let flag = false;
       for (let j = 0; j < current.childDir.length; j++) {
         if (current.childDir[j].name === path_name) {
           current = current.childDir[j];
+          flag = true;
           break;
         }
       }
-      return {
-        error: "そのようなファイルやディレクトリはありません",
-        info: current
-      };
+      if (!flag) {
+        return {
+          error: "そのようなファイルやディレクトリはありません",
+          info: current
+        };
+      }
     }
   }
   return current;
@@ -155,12 +156,13 @@ function complementDir(current_dir: string[], input_dir: string  = "./") {
         return null;
       case 1:
         let dir: string;
-        if (isDir(result)) {
-          dir = target_dir.join("/") + "/" + matched_dir[0].name;
+        if (isDir(result)) { // path: ok
+          dir = target_dir.concat([matched_dir[0].name]).join("/");
         } else {
-          dir = target_dir.length === 1 ? matched_dir[0].name : target_dir.splice(0, target_dir.length - 1).join("/") + "/" + matched_dir[0];
+          target_dir[target_dir.length - 1] = matched_dir[0].name;
+          dir = target_dir.join("/");
         }
-        return { dir: dir }
+        return { dir: dir + (isDir(matched_dir[0]) ? "/" : "") }
       default:
         return printChildDir(matched_dir)
     }

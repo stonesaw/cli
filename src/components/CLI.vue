@@ -46,12 +46,20 @@ import CLIInput from "./CLIInput.vue";
 import * as Commands from "./Commands";
 import { complementDir } from "./DirHelper";
 
+type history = {
+  input: string
+  dir: string[]
+  result_ary: string[]
+}
+
+interface callbackType{(inputText: string, working_dir: string[], histories: history[]) :void};
+
 interface CLIData {
   inputText: string,
-  working_dir: Array<string>,
-  histories: Array<any>,
-  commands: Array<any>,
-  afterInputActions: Array<any>
+  working_dir: string[],
+  histories: history[],
+  commands: {name: string, args: string, desc: string}[],
+  afterInputActions: any[]
 }
 
 export default defineComponent({
@@ -94,9 +102,9 @@ export default defineComponent({
     inputEnter(value: string) {
       // CommandHelper.parse(value)
       const executed = this.execCommand(value);
-      var result;
+      var result: string[];
       if (executed[0] === null) {
-        result = null;
+        result = [""];
       } else if (executed[1] === "html") {
         // print listed, colored with html
         // TODO: sanitize html
@@ -110,7 +118,7 @@ export default defineComponent({
         input: value,
         dir: this.working_dir,
         result_ary: result,
-      });
+      } as history);
 
       // CommandHelper.callAfterActions
 
@@ -128,12 +136,12 @@ export default defineComponent({
       if (typeof result === "string") {
         // print dirs
         let result_ary = this.textToHtml(result).split("\n");
-        result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
+        // result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
         this.histories.push({
           input: input,
           dir: this.working_dir,
           result_ary: result_ary,
-        });
+        } as history);
       } else if (result?.dir) {
         this.refs().input.inputText = `${args[0]} ${result.dir}`;
       } else {
@@ -162,12 +170,12 @@ export default defineComponent({
         }
         case "cd": {
           let cd = Commands.cd(this.working_dir, args.splice(1));
-          if (cd["error"] != undefined) {
-            return [cd["error"], null];
+          if (cd.error !== undefined) {
+            return [cd.error, null];
           } else {
             this.afterInputActions.push(function (component: any) {
-              component.working_dir = cd.data;
-            })
+              component.working_dir = cd.dir;
+            });
             return [null, null];
           }
         }

@@ -21,7 +21,7 @@ import { defineComponent } from 'vue';
 
 interface CLIInputData {
   inputText: string,
-  history: Array<string>,
+  history: string[],
   historyIndex: number | null,
   inputCurrent: string
 }
