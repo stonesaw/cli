@@ -1,0 +1,20 @@
+{
+  "message": {
+    "hello": "hello world"
+  },
+  "help": {
+    "cd": "change directory.",
+    "ls": "list segments.",
+    "cat": "show txt file content.",
+    "history": "command history.",
+    "lang": "change language.",
+    "open": "open link file.",
+    "share":  "share sns."
+  },
+  "errors": {
+    "is_not_dir": "is not directory",
+    "is_not_file": "is not file",
+    "is_not_link": "is not link",
+    "is_not_text": "is not text"
+  }
+}

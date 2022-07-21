@@ -1,0 +1,20 @@
+{
+  "message": {
+    "hello": "こんにちは、世界"
+  },
+  "help": {
+    "cd": "ディレクトリを移動します。",
+    "ls": "ファイルをリスト表示します。",
+    "cat": "テキストファイルの内容を表示します。",
+    "history": "コマンドの履歴を表示します。",
+    "lang": "言語を変更します。",
+    "open": "リンクファイルを開きます。",
+    "share":  "SNSでシェアします。"
+  },
+  "errors": {
+    "is_not_dir": "is not directory",
+    "is_not_file": "is not file",
+    "is_not_link": "is not link",
+    "is_not_text": "is not text"
+  }
+}
