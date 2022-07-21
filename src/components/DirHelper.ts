@@ -1,5 +1,6 @@
 const directory_json = require('../assets/directory.json')
 import * as types from './Types'
+import I18n from "./I18n"
 
 type FileTypes = "txt" | "link" | "img";
 
@@ -101,7 +102,7 @@ function showDirContent(current_dir: string[], target_dir: string = "./"): Dir |
   for (let i = 0; i < path_list.length; i++) {
     const path_name = path_list[i];
     if (isDirFile(current)) { // error: like a 'file_name/dir_name/'
-      return { error: "ディレクトリではありません", info: current }
+      return { error: I18n.t("errors.no_such_dirs"), info: current }
     }
     if (path_name === ".") {
       // no change
@@ -121,10 +122,7 @@ function showDirContent(current_dir: string[], target_dir: string = "./"): Dir |
         }
       }
       if (!flag) {
-        return {
-          error: "そのようなファイルやディレクトリはありません",
-          info: current
-        };
+        return { error: I18n.t("errors.no_such_dirs"), info: current };
       }
     }
   }

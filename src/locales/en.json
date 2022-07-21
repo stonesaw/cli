@@ -1,20 +1,32 @@
 {
-  "message": {
-    "hello": "hello world"
+  "test": {
+    "hello": "hello world",
+    "format": "Hi, {name}!",
+    "multiline": [
+      "multiline with array",
+      "line: {one}",
+      "line: {two}"
+    ]
   },
   "help": {
-    "cd": "change directory.",
-    "ls": "list segments.",
-    "cat": "show txt file content.",
-    "history": "command history.",
-    "lang": "change language.",
-    "open": "open link file.",
-    "share":  "share sns."
+    "summary": {
+      "cd": "change directory.",
+      "ls": "list segments.",
+      "cat": "show txt file content.",
+      "history": "command history.",
+      "lang": "change language.",
+      "open": "open link file.",
+      "share":  "share sns."
+    }
+  },
+  "messages": {
+    "clear_history": "cleared history",
+    "no_history": "no history"
   },
   "errors": {
-    "is_not_dir": "is not directory",
-    "is_not_file": "is not file",
-    "is_not_link": "is not link",
-    "is_not_text": "is not text"
+    "is_not_dir": "\"{dir_name}\" is not directory",
+    "is_not_link": "\"{dir_name}\" is not link",
+    "is_not_text": "\"{dir_name}\" is not text",
+    "no_such_dirs": "No such directory or file"
   }
 }

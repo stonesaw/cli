@@ -1,10 +1,11 @@
 import { isPresent } from './Utils'
 import { showDirContent, isDir, isDirFile, printChildDir } from './DirHelper'
+import I18n from './I18n';
 
 function cd(current_dir: string[], options: string[]): { dir?: string[], error?: string } {
   const target_dir = showDirContent(current_dir, options[0] || "~");
   if (isDirFile(target_dir)) {
-    return { error: `${options[0]}: ディレクトリではありません` };
+    return { error: I18n.t("errors.is_not_dir", { dir_name: options[0] }) };
   } else if (!isDir(target_dir)) {
     return { error: target_dir.error };
   } else {
@@ -15,7 +16,7 @@ function cd(current_dir: string[], options: string[]): { dir?: string[], error?:
 function ls(current_dir: string[], options: string[]): [string, "html" | null] {
   const target_dir = showDirContent(current_dir, options[0]);
   if (isDirFile(target_dir)) {
-    return [`${options[0]}: ディレクトリではありません`, null ];
+    return [I18n.t("errors.is_not_dir", { dir_name: options[0] }), null ];
   } else if (!isDir(target_dir)) {
     return [target_dir.error, null];
   } else {
@@ -31,7 +32,7 @@ function cat(current_dir: string[], options: string[]): [string, "html" | null] 
   if (!isDir(target_dir) && !isDirFile(target_dir)) {
     return [target_dir.error, null];
   } else if (isDir(target_dir) || target_dir.type !== "txt") {
-    return [`${options[0]}: テキストファイルではありません`, null];
+    return [I18n.t("errors.is_not_text", { dir_name: options[0] }), null];
   } else {
     return [target_dir.content, null];
   }
@@ -41,7 +42,7 @@ function cat(current_dir: string[], options: string[]): [string, "html" | null] 
 function history(options: string[]): [string, "html" | null] {
   if (options.includes("-clear")) {
     localStorage.removeItem('history');
-    return [`clear history`, null];
+    return [I18n.t("messages.clear_history"), null];
   }
 
   let history = [];
@@ -52,12 +53,12 @@ function history(options: string[]): [string, "html" | null] {
       localStorage.removeItem('history');
     }
   } else {
-    return [`no history`, null];
+    return [I18n.t("messages.no_history"), null];
   }
   const len = Math.log10(history.length) + 1;
   let str = "";
-  history.forEach((element: any, i: number) => {
-    str += ` ${i.toString().padStart(len, " ")}  ${element}\n`;
+  history.forEach((cmd: any, i: number) => {
+    str += ` ${i.toString().padStart(len, " ")}  ${cmd}\n`;
   });
   return [str.replace(/\n$/, ""), null];
 }
@@ -70,7 +71,7 @@ function open(current_dir: string[], options: string[]) {
   if (!isDir(target_dir) && !isDirFile(target_dir)) {
     return { error: target_dir.error };
   } else if (isDir(target_dir) || target_dir.type !== "link") {
-    return { error: `${options[0]}: リンクではありません` };
+    return { error: I18n.t("errors.is_not_link", { dir_name: options[0] }) };
   } else {
     return { data: target_dir.content };
   }

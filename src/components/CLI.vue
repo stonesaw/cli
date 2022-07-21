@@ -156,7 +156,7 @@ export default defineComponent({
           this.commands.forEach(c => { max_len = Math.max(max_len, c.name.length + c.args.length)});
           this.commands.forEach(c => {
             let len = c.name.length + c.args.length;
-            str += ` * ${c.name} ${c.args}${" ".repeat(max_len - len + 4)}:${I18n.t(`help.${c.name}`)}\n`
+            str += ` * ${c.name} ${c.args}${" ".repeat(max_len - len + 4)}:${I18n.t(`help.summary.${c.name}`)}\n`
           });
           // str += "\nand some secret commands ..."
           return [str.trim(), null];
