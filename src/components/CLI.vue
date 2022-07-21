@@ -45,6 +45,7 @@ import CLIInput from "./CLIInput.vue";
 
 import * as Commands from "./Commands";
 import { complementDir } from "./DirHelper";
+import I18n from "./I18n";
 
 type history = {
   input: string
@@ -55,7 +56,7 @@ type history = {
 interface CLIData {
   working_dir: string[],
   histories: history[],
-  commands: {name: string, args: string, desc: string}[],
+  commands: {name: string, args: string}[],
   afterInputActions: any[]
 }
 
@@ -71,13 +72,13 @@ export default defineComponent({
       working_dir: ["~", "cli"],
       histories: [],
       commands: [
-        { name: "cd",      args: "[dir]",       desc: "change directory." },
-        { name: "ls",      args: "[dir]",       desc: "list segments." },
-        { name: "cat",     args: "[file]",      desc: "show txt file content." },
-        { name: "history", args: "[-clear]",    desc: "command history." },
-        { name: "lang",    args: "[en|ja]",     desc: "change language." },
-        { name: "open",    args: "[link_file]", desc: "open link file." },
-        { name: "share",   args: "[-tw]",       desc: "share sns." },
+        { name: "cd",      args: "[dir]" },
+        { name: "ls",      args: "[dir]" },
+        { name: "cat",     args: "[file]" },
+        { name: "history", args: "[-clear]" },
+        { name: "lang",    args: "[en|ja]" },
+        { name: "open",    args: "[link_file]" },
+        { name: "share",   args: "[-tw]" },
       ],
 
       afterInputActions: []
@@ -141,9 +142,9 @@ export default defineComponent({
       }
     },
 
+    // return [message, flag]
+    // message: null ... enter next line.
     execCommand(input: string): [string | null, "html" | null] {
-      // return [str, flag]
-      // flag: null or "html"
       const args = input.split(" ").filter((s) => s !== "");
       if (args.length === 0) {
         return [null, null];
@@ -155,10 +156,10 @@ export default defineComponent({
           this.commands.forEach(c => { max_len = Math.max(max_len, c.name.length + c.args.length)});
           this.commands.forEach(c => {
             let len = c.name.length + c.args.length;
-            str += ` * ${c.name} ${c.args}${" ".repeat(max_len - len + 4)}:${c.desc}\n`
+            str += ` * ${c.name} ${c.args}${" ".repeat(max_len - len + 4)}:${I18n.t(`help.${c.name}`)}\n`
           });
-          str += "\nand some secret commands ..."
-          return [str, null];
+          // str += "\nand some secret commands ..."
+          return [str.trim(), null];
         }
         case "cd": {
           let cd = Commands.cd(this.working_dir, args.splice(1));
@@ -176,8 +177,15 @@ export default defineComponent({
           return Commands.history(args.splice(1));
         }
         case "lang": {
-          // TODO
-          return ["set language : coming soon!", null];
+          if (!args[1] || args[1] === "") {
+            return [`current lang is ${I18n.locale}`, null];
+          }
+          try{
+            I18n.setLocale(args[1]);
+            return [`lang: set language '${args[1]}'`, null];
+          } catch (error) {
+            return [`lang: can't set language '${args[1]}'`, null];
+          }
         }
         case "open": {
           let open = Commands.open(this.working_dir, args.splice(1));
@@ -189,9 +197,6 @@ export default defineComponent({
             window.open(open.data);
             return [`open: ${open.data}`, null];
           }
-        }
-        case "editor": {
-          return ["sorry... editor command was deleted.", null];
         }
         case "share": {
           if (args[1] === "-tw") {
