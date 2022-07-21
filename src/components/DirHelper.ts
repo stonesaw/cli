@@ -88,11 +88,6 @@ function findAll(parentDir: Dir, pattern: RegExp = /.*/):(Dir | DirFile)[] {
   return parentDir.childDir.filter(child => pattern.test(child.name));
 }
 
-function joinDir(dir_ary: string[], dir_name: string): string[] {
-  // TODO
-  return [""];
-}
-
 function getFullPath(current_dir: string[], target_dir: string): string[] {
   const target_ary = target_dir.split("/")
                                    .filter(d => d !== "" && d !== ".");
@@ -179,7 +174,6 @@ export {
   directory,
   generateDir,
   printChildDir,
-  joinDir,
   showDirContent,
   complementDir
 }

@@ -52,10 +52,7 @@ type history = {
   result_ary: string[]
 }
 
-interface callbackType{(inputText: string, working_dir: string[], histories: history[]) :void};
-
 interface CLIData {
-  inputText: string,
   working_dir: string[],
   histories: history[],
   commands: {name: string, args: string, desc: string}[],
@@ -71,11 +68,8 @@ export default defineComponent({
 
   data() {
     return {
-      inputText: "", // emitted: CLIInput
-      working_dir: ["~", "cli"], // current directory (array)
-      histories: [
-        // {input: "", dir: [], result_ary: []} ...
-      ],
+      working_dir: ["~", "cli"],
+      histories: [],
       commands: [
         { name: "cd",      args: "[dir]",       desc: "change directory." },
         { name: "ls",      args: "[dir]",       desc: "list segments." },
@@ -134,9 +128,7 @@ export default defineComponent({
       if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
       const result = complementDir(this.working_dir, args[1]);
       if (typeof result === "string") {
-        // print dirs
         let result_ary = this.textToHtml(result).split("\n");
-        // result_ary = result_ary.map(x => x === "" ? "&nbsp;" : x);
         this.histories.push({
           input: input,
           dir: this.working_dir,
@@ -170,25 +162,17 @@ export default defineComponent({
         }
         case "cd": {
           let cd = Commands.cd(this.working_dir, args.splice(1));
-          if (cd.error !== undefined) {
-            return [cd.error, null];
-          } else {
+          if (cd.error == undefined) {
             this.afterInputActions.push(function (component: any) {
               component.working_dir = cd.dir;
             });
-            return [null, null];
           }
+          return [cd.error || null, null];
         }
-        case "ls": {
-          return Commands.ls(this.working_dir, args.splice(1));
-        }
-        case "cat": {
-          return Commands.cat(this.working_dir, args.splice(1));
-        }
+        case "ls": { return Commands.ls(this.working_dir, args.splice(1)); }
+        case "cat": { return Commands.cat(this.working_dir, args.splice(1)); }
         case "history": {
-          if (args[1] === "-clear") {
-            this.refs().input.clearHistory();
-          }
+          if (args[1] === "-clear") { this.refs().input.clearHistory(); }
           return Commands.history(args.splice(1));
         }
         case "lang": {
