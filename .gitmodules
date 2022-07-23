@@ -1,0 +1,3 @@
+[submodule "src/assets/directory/portfolio"]
+	path = src/assets/directory/portfolio
+	url = git@github.com:stonesaw/portfolio.git
