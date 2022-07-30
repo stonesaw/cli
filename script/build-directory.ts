@@ -1,33 +1,41 @@
 const fs = require("fs");
 const path = require('path');
-const template = require('../src/assets/directory_template.json');
+const util = require('util');
 
-function isType(type, obj) {
-  var toString = Object.prototype.toString.call(obj).slice(8, -1);
-  return obj !== undefined && obj !== null && toString === type;
+type JSONType = {
+  [key: string]: JSONType | string[]
 }
 
-function isObject(obj)   { return isType("Object",   obj); }
+function isJSon(obj: any): obj is JSONType {
+  return (Object.keys(obj).length > 0);
+}
 
-function loadDirectory(template, head = []) {
-  let keys = Object.keys(template);
-  if (!isObject(template)) {
+function pp(obj: any, str?: string) {
+  console.log(
+    (str ? `${str}: ` : "") +
+    util.inspect(obj, {showHidden: false, depth: null, colors: true})
+  );
+}
+
+const template: JSONType = require('../src/assets/directory_template.json');
+
+function loadDirectory(template: JSONType | string[], head: string[] = []) {
+  if (Array.isArray(template)) {
     if (template[0] === "txt") { // load content
-      let path_ary = [...head];
-      path_ary.shift(); // delete "~"
+      const path_ary = [...head].splice(1); // delete "~"
       const file_path = path.join(__dirname, "../src/assets/directory/", path_ary.join("/"));
       const buff = fs.readFileSync(file_path, "utf8");
       template[1] = buff;
     }
-    return template;
+  } else if (isJSon(template)) { // is folder
+    const keys = Object.keys(template);
+    for (let i = 0; i < keys.length; i++) { // search files
+      const dir_name = keys[i];
+      const _head = [...head];
+      _head.push(dir_name);
+      loadDirectory(template[dir_name], _head);
+    }
   }
-  for (let i = 0; i < keys.length; i++) {
-    const element = keys[i];
-    let _head = [...head];
-    _head.push(element);
-    loadDirectory(template[element], _head);
-  }
-
   return template;
 }
 
