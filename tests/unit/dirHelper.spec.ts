@@ -1,9 +1,3 @@
-const util = require('util');
-
-function debug(obj: any) {
-  console.log(util.inspect(obj, {showHidden: false, depth: null, colors: true}))
-}
-
 import {
   directory,
   isDir,
@@ -13,7 +7,6 @@ import {
 
 
 test("DirHelper", () => {
-  debug(directory);
   expect(isDir(directory)).toBe(true);
   if (isDir(directory)) {
     // test Dir property
