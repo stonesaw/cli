@@ -1,8 +1,8 @@
 name: main
-on: push
+on: [push, pull_request]
 
 jobs:
-  setup:
+  install:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -24,6 +24,26 @@ jobs:
       - name: Install dependencies
         if: steps.node_modules_cache_id.outputs.cache-hit != 'true'
         run: yarn --check-files --frozen-lockfile --non-interactive
+  setup:
+    needs: install
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Setup node env
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Restore node_modules
+        id: node_modules_cache_id
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ matrix.os }}-node-v${{ matrix.node }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
       - name: Run Setup Script
         run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn run setup
   test:
@@ -46,9 +66,8 @@ jobs:
         with:
           path: node_modules
           key: ${{ matrix.os }}-node-v${{ matrix.node }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
-
       - name: Lint
-        run: yarn run lint
+        run: yarn run test
   lint:
     needs: setup
     runs-on: ${{ matrix.os }}
@@ -70,7 +89,7 @@ jobs:
           path: node_modules
           key: ${{ matrix.os }}-node-v${{ matrix.node }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
       - name: Test
-        run: yarn run test
+        run: yarn run lint
 
   publish:
     needs: [test, lint]
