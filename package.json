@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "setup": "ts-node script/build-directory",
+    "setup": "./node_modules/.bin/ts-node script/build-directory",
     "serve": "npm run setup && vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
