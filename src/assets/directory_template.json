@@ -8,6 +8,17 @@
           "logo.png": ["img"]
         }
       }
+    },
+    "portfolio": {
+      "$import": {
+        "from": "github:stonesaw/portfolio",
+        "exclude": [
+          "package-lock.json"
+        ],
+        "merge": {
+          "repo.link": ["link", "https://github.com/stonesaw/portfolio"]
+        }
+      }
     }
   }
 }
