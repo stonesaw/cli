@@ -24,6 +24,8 @@ jobs:
       - name: Install dependencies
         if: steps.node_modules_cache_id.outputs.cache-hit != 'true'
         run: yarn --check-files --frozen-lockfile --non-interactive
+      - name: Run Setup Script
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn run setup
   test:
     needs: setup
     runs-on: ${{ matrix.os }}
