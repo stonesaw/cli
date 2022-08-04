@@ -87,7 +87,7 @@ async function searchAllRepoContent(owner: string, repo: string, path?: string) 
   });
 
   if (!Array.isArray(data)) { // is file
-    const text_type = /.*\.(html|css|scss|js|ts|md|json|yml|yaml|vue|gitignore|gitmodules)$/i;
+    const text_type = /.*\.(html|css|scss|js|ts|md|json|yml|yaml|vue|rb|erb|gitignore|gitmodules)$/i;
     if (text_type.test(data.name)) {
       const buff = Buffer.from(data.content, 'base64').toString();
       return ["txt", buff];
@@ -133,24 +133,22 @@ function loadDirectory(template: JSONType | string[], head: string[] = []) {
         pp(imported, "imported");
         if (isImportObj(imported)) {
           const from = imported.from;
-          if (/^github:\w+\/\w+$/.test(from)) {
-            const matched = /^github:(?<owner>\w+)\/(?<repo>\w+)$/.exec(from);
-            const owner = matched?.groups?.owner;
-            const repo = matched?.groups?.repo;
-            if (owner && repo) {
-              pp(`searching ${owner}/${repo}`);
-              searchAllRepoContent(owner, repo).then(() => {
-                const result = { ...imported_json, ...imported?.merge || {} };
-                directory = fillJSON(head, result);
-                fs.writeFileSync(path.join(__dirname, "../src/assets/directory.json"), JSON.stringify(directory, null, 2));
-                // const result = JSON.stringify(imported_json, null, 2);
-                // fs.writeFileSync(path.join(__dirname, "../src/assets/test.json"), result);
-                imported_json = {};
-                pp("filled json");
-              })
-            } else {
-              throw Error(`unknown $import.from (${from})`);
-            }
+          const matched = /^github:(?<owner>[^\/]+)\/(?<repo>[^\/]+)$/.exec(from);
+          const owner = matched?.groups?.owner;
+          const repo = matched?.groups?.repo;
+          if (matched && owner && repo) {
+            pp(`searching ${owner}/${repo}`);
+            searchAllRepoContent(owner, repo).then(() => {
+              const result = { ...imported_json, ...imported?.merge || {} };
+              directory = fillJSON(head, result);
+              fs.writeFileSync(path.join(__dirname, "../src/assets/directory.json"), JSON.stringify(directory, null, 2));
+              // const result = JSON.stringify(imported_json, null, 2);
+              // fs.writeFileSync(path.join(__dirname, "../src/assets/test.json"), result);
+              imported_json = {};
+              pp("filled json");
+            })
+          } else {
+            throw Error(`unknown $import.from (${from})`);
           }
         }
       } else {

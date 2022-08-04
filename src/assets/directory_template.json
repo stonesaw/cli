@@ -19,6 +19,14 @@
           "repo.link": ["link", "https://github.com/stonesaw/portfolio"]
         }
       }
+    },
+    "Spell-Out": {
+      "$import": {
+        "from": "github:stonesaw/Spell-Out",
+        "merge": {
+          "repo.link": ["link", "https://github.com/stonesaw/Spell-Out"]
+        }
+      }
     }
   }
 }
