@@ -1,8 +1,13 @@
-# 🎈 [cli](https://stonesaw.github.io/cli)
-https://stonesaw.github.io/cli  
-[ 🔨 Building now ...]  
-Implement the cli interface on the web  
+<div align="center">
 
+
+# >_ cli
+
+[ 🔨 WIP ]　|　**cli like portfolio**　|　https://stonesaw.github.io/cli
+
+
+  <img width="80%" src="https://user-images.githubusercontent.com/50014309/178110643-95fa2569-f94b-4210-9f2c-dac130305de0.png" />
+</div>
 
 ## ✨ Features
 ```bash
