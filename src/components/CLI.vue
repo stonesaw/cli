@@ -126,7 +126,7 @@ export default defineComponent({
 
     inputTab(input: string) {
       const args = input.split(" ").filter((s) => s !== "");
-      if (args.length === 0 || !["cd", "ls"].includes(args[0])) { return null; }
+      if (args.length === 0 || !["cd", "ls", "cat", "open"].includes(args[0])) { return null; }
       const result = complementDir(this.working_dir, args[1]);
       if (typeof result === "string") {
         let result_ary = this.textToHtml(result).split("\n");
